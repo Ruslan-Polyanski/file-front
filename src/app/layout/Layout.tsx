@@ -1,33 +1,21 @@
-import { FC } from "react"
-import { Home } from "../../pages/home/Home"
+import { FC } from 'react';
+import { Header } from '../ui/header/Header';
+import { Outlet } from 'react-router-dom';
+import style from './Layout.module.css';
 
 const Layout: FC = () => {
-  return <>
-    <header>
-      <div>Logo</div>
-      <nav>
-        <ul>
-          <li>Отметить сотрудников</li>
-          <li>Забронировать автомобиль</li>
-          <li>Ссылка 3</li>
-        </ul>
-      </nav>
-    </header>
-    <main>
-      <aside>
-        <ul>
-          <li>Сотрудники</li>
-          <li>Объекты</li>
-          <li>Оборудование</li>
-          <li>Профиль</li>
-        </ul>
-      </aside>
-      <section>
-        <Home />
-      </section>
-    </main>
-    <footer>footer</footer>
-  </>
-}
+  return (
+    <>
+      <div className={style.header}>
+        <Header />
+      </div>
+      <main>
+        <div className={style.box}>
+          <Outlet />
+        </div>
+      </main>
+    </>
+  );
+};
 
-export { Layout }
+export { Layout };

@@ -2,7 +2,7 @@ import { FC } from "react"
 
 const Home: FC = () => {
   return <>
-    Привет
+    <h1>Домашняя страница</h1>
   </>
 }
 
