@@ -1,0 +1,42 @@
+.employee__box {
+  border: 1px solid #999;
+  padding: 10px;
+  display: flex;
+  gap: 20px;
+}
+
+.imageBox img {
+  max-width: 150px;
+  width: 100%;
+  height: auto;
+}
+
+.h2 {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.profession {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.timeBox {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.timeSetter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.boxTimeSetters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
