@@ -1,11 +1,6 @@
 import { FC, useState } from 'react';
 import style from './CardEmployee.module.css';
 import DatePicker from 'react-datepicker';
-import { registerLocale } from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { ru } from 'date-fns/locale';
-
-registerLocale('ru', ru);
 
 interface IEmployee {
   firstName: string;
