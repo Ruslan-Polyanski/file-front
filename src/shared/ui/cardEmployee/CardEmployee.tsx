@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import { setHours } from 'date-fns/setHours';
 import { setMinutes } from 'date-fns/setMinutes';
 
-interface IEmployee {
+export interface IEmployee {
   firstName: string;
   lastName: string;
   surname: string;

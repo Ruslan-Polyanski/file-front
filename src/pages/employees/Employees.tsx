@@ -1,17 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import style from './Employees.module.css';
 import { CardEmployee } from '../../shared/ui/cardEmployee/CardEmployee';
+import { IEmployee } from '../../shared/ui/cardEmployee/CardEmployee';
 
-interface IEmployee {
-  firstName: string;
-  lastName: string;
-  surname: string;
-  profession: string;
+interface IPreviewIEmployee extends IEmployee {
   uniqueID: string;
-  photo: string;
 }
 
-type TEmployees = IEmployee[];
+type TEmployees = IPreviewIEmployee[];
 
 const mickFactories = [
   'Минский моторный завод',
