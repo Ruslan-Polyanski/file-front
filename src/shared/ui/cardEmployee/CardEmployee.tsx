@@ -25,7 +25,7 @@ const CardEmployee: FC<IEmployee> = ({
   const [endDate, setEndDate] = useState<Date | null>(
     setHours(setMinutes(new Date(), 15), 17),
   );
-  const [breaDate, setBreakDate] = useState<Date | null>(
+  const [breakDate, setBreakDate] = useState<Date | null>(
     setHours(setMinutes(new Date(), 45), 0),
   );
 
@@ -77,7 +77,7 @@ const CardEmployee: FC<IEmployee> = ({
               <span>Перерыв</span>
               <div>
                 <DatePicker
-                  selected={breaDate}
+                  selected={breakDate}
                   onChange={(date) => setBreakDate(date)}
                   showTimeSelect
                   showTimeSelectOnly
