@@ -1,6 +1,8 @@
 import { FC, useState } from 'react';
 import style from './CardEmployee.module.css';
 import DatePicker from 'react-datepicker';
+import { setHours } from 'date-fns/setHours';
+import { setMinutes } from 'date-fns/setMinutes';
 
 interface IEmployee {
   firstName: string;
@@ -17,8 +19,15 @@ const CardEmployee: FC<IEmployee> = ({
   lastName,
   surname,
 }) => {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(
+    setHours(setMinutes(new Date(), 30), 8),
+  );
+  const [endDate, setEndDate] = useState<Date | null>(
+    setHours(setMinutes(new Date(), 15), 17),
+  );
+  const [breaDate, setBreakDate] = useState<Date | null>(
+    setHours(setMinutes(new Date(), 45), 0),
+  );
 
   const altText = `${firstName} ${lastName} ${surname}`;
   return (
@@ -68,12 +77,14 @@ const CardEmployee: FC<IEmployee> = ({
               <span>Перерыв</span>
               <div>
                 <DatePicker
-                  selected={endDate}
-                  onChange={(date) => setEndDate(date)}
+                  selected={breaDate}
+                  onChange={(date) => setBreakDate(date)}
                   showTimeSelect
                   showTimeSelectOnly
                   timeIntervals={15}
                   dateFormat="HH:mm"
+                  minTime={setHours(setMinutes(new Date(), 0), 0)}
+                  maxTime={setHours(setMinutes(new Date(), 0), 4)}
                   showTimeCaption={false}
                   locale="ru"
                 />
