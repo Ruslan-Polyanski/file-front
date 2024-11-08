@@ -9,15 +9,6 @@ interface IPreviewIEmployee extends IEmployee {
 
 type TEmployees = IPreviewIEmployee[];
 
-const mickFactories = [
-  'Минский моторный завод',
-  'Минский тракторный завод',
-  'Минский автомобильный завод',
-  'Борисовский завод агрегатов',
-  'Гомельский завод сельскохозяйственного машиностроения',
-  'ОАО Амкодор-Унимод',
-];
-
 const mockEmployees = [
   {
     firstName: 'Игорь',

@@ -6,6 +6,17 @@ import { setMinutes } from 'date-fns/setMinutes';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+
+const mickFactories = [
+  'Минский моторный завод',
+  'Минский тракторный завод',
+  'Минский автомобильный завод',
+  'Борисовский завод агрегатов',
+  'Гомсельмаш',
+  'Амкодор-Унимод',
+];
 
 export interface IEmployee {
   firstName: string;
@@ -48,7 +59,7 @@ const CardEmployee: FC<IEmployee> = ({
         <img src={photo} alt={altText} />
         <div className={style.profession}>{profession}</div>
       </div>
-      <div>
+      <div className={style.mainBoxTime}>
         <h2 className={style.h2}>
           {firstName} {lastName} {surname}
         </h2>
@@ -114,6 +125,50 @@ const CardEmployee: FC<IEmployee> = ({
               </div>
             </div>
           )}
+        </div>
+      </div>
+      <div className={style['autocomplete-box']}>
+        <div className={style['options-box']}>
+          <Autocomplete
+            disablePortal
+            options={mickFactories}
+            sx={{ width: 250 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Место проведения работ" />
+            )}
+          />
+        </div>
+        <div className={style['options-box']}>
+          <Autocomplete
+            disablePortal
+            options={[
+              'ИФДС5190',
+              'ИФДС5297',
+              'ИФДС5493',
+              'ИФДС5518',
+              'ИФДС5519',
+            ]}
+            sx={{ width: 250 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Технологический объект" />
+            )}
+          />
+        </div>
+        <div className={style['options-box']}>
+          <Autocomplete
+            disablePortal
+            options={[
+              'Игорь Петров Петрович',
+              'Кузнецов Пертов Петрович',
+              'Демко Игорь Михайлович',
+              'Сашко Олег Никифорович',
+              'Осулин Виктор Иванович',
+            ]}
+            sx={{ width: 250 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Руководитель проекта" />
+            )}
+          />
         </div>
       </div>
     </section>
