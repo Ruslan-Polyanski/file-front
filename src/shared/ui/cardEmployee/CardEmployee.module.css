@@ -25,7 +25,7 @@
   margin-top: 15px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 5px;
 }
 
 .timeSetter {
@@ -38,5 +38,9 @@
 .boxTimeSetters {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 11px;
+}
+
+.text {
+  font-size: 10px;
 }

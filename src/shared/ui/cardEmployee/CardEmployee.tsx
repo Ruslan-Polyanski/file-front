@@ -3,6 +3,9 @@ import style from './CardEmployee.module.css';
 import DatePicker from 'react-datepicker';
 import { setHours } from 'date-fns/setHours';
 import { setMinutes } from 'date-fns/setMinutes';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 export interface IEmployee {
   firstName: string;
@@ -41,7 +44,15 @@ const CardEmployee: FC<IEmployee> = ({
           {firstName} {lastName} {surname}
         </h2>
         <div className={style.timeBox}>
-          <h3>Рабочее время</h3>
+          <div className={style.changeStatus}>
+            <h3>Рабочее время</h3>
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox />}
+                label={<span style={{ fontSize: '16px' }}>{'Прогул'}</span>}
+              />
+            </FormGroup>
+          </div>
           <div className={style.boxTimeSetters}>
             <div className={style.timeSetter}>
               <span>Начало</span>
