@@ -1,6 +1,7 @@
 .employee__box {
   border: 1px solid #999;
   padding: 10px;
+  padding-bottom: 12px;
   display: flex;
   gap: 20px;
 }
@@ -25,7 +26,7 @@
   margin-top: 15px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 5px;
 }
 
 .timeSetter {
@@ -38,5 +39,23 @@
 .boxTimeSetters {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 11px;
+}
+
+.text {
+  font-size: 10px;
+}
+
+.autocomplete-box {
+  /* margin-right: 10px; */
+  display: flex;
+  flex-direction: column;
+  /* gap: 12px; */
+  justify-content: space-between;
+}
+
+.mainBoxTime {
+  border-right: 1px solid rgb(143, 143, 143);
+  padding-right: 20px;
+  min-width: 272px;
 }

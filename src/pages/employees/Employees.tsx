@@ -1,26 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import style from './Employees.module.css';
 import { CardEmployee } from '../../shared/ui/cardEmployee/CardEmployee';
+import { IEmployee } from '../../shared/ui/cardEmployee/CardEmployee';
 
-interface IEmployee {
-  firstName: string;
-  lastName: string;
-  surname: string;
-  profession: string;
+interface IPreviewIEmployee extends IEmployee {
   uniqueID: string;
-  photo: string;
 }
 
-type TEmployees = IEmployee[];
-
-const mickFactories = [
-  'Минский моторный завод',
-  'Минский тракторный завод',
-  'Минский автомобильный завод',
-  'Борисовский завод агрегатов',
-  'Гомельский завод сельскохозяйственного машиностроения',
-  'ОАО Амкодор-Унимод',
-];
+type TEmployees = IPreviewIEmployee[];
 
 const mockEmployees = [
   {
