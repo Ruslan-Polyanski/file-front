@@ -5,6 +5,7 @@ import { Home } from '../../pages/home/Home';
 import { Profile } from '../../pages/profile/Profile';
 import { Employees } from '../../pages/employees/Employees';
 import { Car } from '../../pages/car/Car';
+import { Auth } from '../../pages/auth/Auth';
 
 const router = createBrowserRouter(
   [
@@ -28,6 +29,10 @@ const router = createBrowserRouter(
         {
           path: 'profile',
           element: <Profile />,
+        },
+        {
+          path: 'auth',
+          element: <Auth />,
         },
       ],
     },
