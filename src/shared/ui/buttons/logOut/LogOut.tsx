@@ -1,12 +1,14 @@
-import { FC } from "react";
-import style from "./LogOut.module.css"
+import { FC } from 'react';
+import style from './LogOut.module.css';
 
 const LogOut: FC = () => {
-  return <>
-    <button className={style.bg}>
-      <span>Выход</span>
-    </button>
-  </>
-}
+  return (
+    <>
+      <button className={style.bg}>
+        <span>Выход</span>
+      </button>
+    </>
+  );
+};
 
-export { LogOut }
+export { LogOut };

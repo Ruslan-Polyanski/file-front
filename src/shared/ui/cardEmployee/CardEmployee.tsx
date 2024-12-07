@@ -8,7 +8,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-
+console.log(<DatePicker />);
 const mickFactories = [
   'Минский моторный завод',
   'Минский тракторный завод',
