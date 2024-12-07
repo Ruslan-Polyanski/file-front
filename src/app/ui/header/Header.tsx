@@ -35,6 +35,16 @@ const Header: FC = () => {
                 Забронировать автомобиль
               </NavLink>
             </li>
+            <li className={style.item}>
+              <NavLink
+                to={'auth'}
+                className={({ isActive }) =>
+                  isActive ? style.active : style.notActive
+                }
+              >
+                Авторизация
+              </NavLink>
+            </li>
           </ul>
         </nav>
         <div className={style.button}>
