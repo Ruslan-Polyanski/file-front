@@ -1,7 +1,5 @@
 import { FC, useState } from 'react';
 
-const URL = 'http://localhost:3001/api/auth/login';
-
 interface IUser {
   email: string;
   password: string;
@@ -16,8 +14,8 @@ interface IUserResponse {
 const Auth: FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [userDataResponse, setUserDataResponse] =
-    useState<IUserResponse | null>(null);
+  // const [userDataResponse, setUserDataResponse] =
+  //   useState<IUserResponse | null>(null);
   // const [isLogin, setIsLogin] = useState(false);
   // const [error, setError] = useState('');
 
@@ -37,25 +35,16 @@ const Auth: FC = () => {
     HTMLButtonElement
   > = async (event) => {
     event.preventDefault();
-    const user: IUser = {
-      email,
-      password,
-    };
-
-    fetch(URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
-      body: JSON.stringify(user),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setUserDataResponse(data);
-      })
-      .catch(() => {
-        console.log('ConsoleError');
-      });
+    // const user: IUser = {
+    //   email,
+    //   password,
+    // };
+    // const result = await login(user);
+    // if (result) {
+    //   setToken(result.token);
+    // } else {
+    //   console.log('mistake');
+    // }
   };
 
   return (
