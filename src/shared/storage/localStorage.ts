@@ -1,12 +1,12 @@
-const LStorage = {
-  getItem: (key: string) => {
-    let result: unknown;
+const LocalStorage = {
+  getItem: (key: string): string | null => {
+    let result: string | null;
     try {
       const value = localStorage.getItem(key) ?? '';
       result = JSON.parse(value);
     } catch (err) {
       console.log(err);
-      result = '';
+      result = null;
     }
     return result;
   },
@@ -25,4 +25,4 @@ const LStorage = {
   },
 };
 
-export { LStorage };
+export { LocalStorage };
