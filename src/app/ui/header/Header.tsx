@@ -1,10 +1,17 @@
 import { FC } from 'react';
 import style from './Header.module.css';
 import { Logo } from '../../../shared/ui/logo/Logo';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router';
 import { LogOut } from '../../../shared/ui/buttons/logOut/LogOut';
+import { createLogOut } from '../../../pages/auth/authPage.slice';
+import { AppDispatch } from '../../store/store';
+import { useDispatch } from 'react-redux';
 
 const Header: FC = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const handleClickLogOutButton = () => {
+    dispatch(createLogOut());
+  };
   return (
     <>
       <header className={style.header}>
@@ -38,7 +45,7 @@ const Header: FC = () => {
           </ul>
         </nav>
         <div className={style.button}>
-          <LogOut />
+          <LogOut callBack={handleClickLogOutButton} />
         </div>
       </header>
     </>

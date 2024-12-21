@@ -4,28 +4,19 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 import { FC, useState } from 'react';
-import { LocalStorage } from '../../shared/storage/localStorage';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../app/store/store';
+import { createLogin } from './authPage.slice';
 
 interface IUser {
   email: string;
   password: string;
 }
 
-interface IUserResponse {
-  id: number;
-  email: string;
-  token: string;
-}
-
-interface IProps {
-  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const AuthorizationForm: FC<IProps> = ({ setIsLogin }) => {
+const AuthPage: FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [isDisabled, setIsDisabled] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch: AppDispatch = useDispatch();
 
   const handleChangeEmail: React.ChangeEventHandler<HTMLInputElement> = (
     event,
@@ -44,35 +35,8 @@ const AuthorizationForm: FC<IProps> = ({ setIsLogin }) => {
       email,
       password,
     };
-    setIsDisabled(true);
-    fetch('http://localhost:3001/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('You are not authorized');
-        }
-        return response.json();
-      })
-      .then((data: IUserResponse) => {
-        console.log(data);
-        const { id, email, token } = data;
-        LocalStorage.setItem('token', token);
-        setIsLogin(true);
-        console.log(id, email);
-      })
-      .catch((err) => {
-        console.log(err);
-        setError('Ошибка');
-      })
-      .finally(() => setIsDisabled(false));
 
-    setEmail('');
-    setPassword('');
+    dispatch(createLogin(user));
   };
 
   return (
@@ -116,22 +80,12 @@ const AuthorizationForm: FC<IProps> = ({ setIsLogin }) => {
           alignItems: 'center',
         }}
       >
-        <Button
-          onClick={handleClickButtonSendForm}
-          variant="contained"
-          disabled={isDisabled}
-        >
+        <Button onClick={handleClickButtonSendForm} variant="contained">
           Отправить
         </Button>
       </Stack>
-
-      {error ? (
-        <Typography variant="body1" color="error" align="center" fontSize={16}>
-          Ошибка ввода почты или пароля.
-        </Typography>
-      ) : null}
     </Box>
   );
 };
 
-export { AuthorizationForm };
+export { AuthPage };

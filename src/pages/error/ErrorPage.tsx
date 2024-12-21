@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import img from '../../shared/assets/notFound.png';
-import style from './Error.module.css';
-import { Link } from 'react-router-dom';
+import style from './ErrorPage.module.css';
+import { Link } from 'react-router';
 
-const Error: FC = () => {
+const ErrorPage: FC = () => {
   return (
     <div className={style.box}>
       <div className={style.boxImg}>
@@ -16,4 +16,4 @@ const Error: FC = () => {
   );
 };
 
-export { Error };
+export { ErrorPage };

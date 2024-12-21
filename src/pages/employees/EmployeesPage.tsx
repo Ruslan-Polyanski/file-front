@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import style from './Employees.module.css';
+import style from './EmployeesPage.module.css';
 import { CardEmployee } from '../../shared/ui/cardEmployee/CardEmployee';
 import { IEmployee } from '../../shared/ui/cardEmployee/CardEmployee';
 
@@ -102,7 +102,7 @@ const mockEmployees = [
   },
 ];
 
-const Employees: FC = () => {
+const EmployeesPage: FC = () => {
   const [employees, setEemployees] = useState<TEmployees | []>([]);
 
   useEffect(() => {
@@ -138,4 +138,4 @@ const Employees: FC = () => {
   );
 };
 
-export { Employees };
+export { EmployeesPage };

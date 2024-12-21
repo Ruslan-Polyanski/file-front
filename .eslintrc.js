@@ -16,6 +16,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'react'],
   rules: {
+    'no-debugger': 'off',
     'react/react-in-jsx-scope': 'off',
     'prettier/prettier': [
       'warn',
@@ -25,4 +26,3 @@ module.exports = {
     ],
   },
 };
-
