@@ -1,35 +1,40 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router';
 import { Layout } from '../layout/Layout';
-import { Error } from '../../pages/error/Error';
-import { Home } from '../../pages/home/Home';
-import { Profile } from '../../pages/profile/Profile';
-import { Employees } from '../../pages/employees/Employees';
-import { Car } from '../../pages/car/Car';
+import { ErrorPage } from '../../pages/error/ErrorPage';
+import { HomePage } from '../../pages/home/HomePage';
+import { ProfilePage } from '../../pages/profile/ProfilePage';
+import { EmployeesPage } from '../../pages/employees/EmployeesPage';
+import { CarPage } from '../../pages/car/CarPage';
+import { AuthPage } from '../../pages/auth/AuthPage';
 
 const router = createBrowserRouter(
   [
     {
       path: '/',
       element: <Layout />,
-      errorElement: <Error />,
+      errorElement: <ErrorPage />,
       children: [
         {
           index: true,
-          element: <Home />,
+          element: <HomePage />,
         },
         {
           path: 'employees',
-          element: <Employees />,
+          element: <EmployeesPage />,
         },
         {
           path: 'car',
-          element: <Car />,
+          element: <CarPage />,
         },
         {
           path: 'profile',
-          element: <Profile />,
+          element: <ProfilePage />,
         },
       ],
+    },
+    {
+      path: 'login',
+      element: <AuthPage />,
     },
   ],
   { basename: '/file-front' },

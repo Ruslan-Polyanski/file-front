@@ -1,16 +1,20 @@
 import './styles/reset.css';
 import './styles/global.css';
 import { FC, useEffect, useState } from 'react';
-import { RouterProvider } from 'react-router-dom';
+
 import { router } from './router/Router';
 import { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ru } from 'date-fns/locale';
 
 import { LocalStorage } from '../shared/storage/localStorage';
-import { AuthorizationForm } from '../widgets/forms/AuthorizationForm';
 import { Loader } from '../shared/ui/loader/Loader';
 import Box from '@mui/material/Box';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from './store/store';
+import { logIn } from '../pages/auth/authPage.slice';
+import { AuthPage } from '../pages/auth/AuthPage';
+import { RouterProvider } from 'react-router';
 
 registerLocale('ru', ru);
 
@@ -21,12 +25,14 @@ interface IUserResponse {
 }
 
 const App: FC = () => {
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const dispatch: AppDispatch = useDispatch();
+
   const [isLoader, setIsLoader] = useState<boolean>(true);
 
   useEffect(() => {
     const access_token = LocalStorage.getItem('token');
-    console.log(access_token);
+
     if (access_token) {
       fetch('http://localhost:3001/api/auth/profile', {
         method: 'GET',
@@ -37,7 +43,7 @@ const App: FC = () => {
       })
         .then((response) => {
           if (response.ok) {
-            setIsLogin(true);
+            dispatch(logIn());
             return response.json();
           } else {
             throw new Error('Your token is destroy');
@@ -56,26 +62,22 @@ const App: FC = () => {
     }
   }, []);
 
-  return (
-    <>
-      {isLoader ? (
-        <Box
-          marginTop={10}
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Loader />
-        </Box>
-      ) : isLogin ? (
-        <RouterProvider router={router} />
-      ) : (
-        <AuthorizationForm setIsLogin={setIsLogin} />
-      )}
-    </>
-  );
+  if (isLoader) {
+    return (
+      <Box
+        marginTop={10}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Loader />
+      </Box>
+    );
+  }
+
+  return isAuth ? <RouterProvider router={router} /> : <AuthPage />;
 };
 
 export { App };
