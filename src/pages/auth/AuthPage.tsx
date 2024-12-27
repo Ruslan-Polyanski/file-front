@@ -3,10 +3,11 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
-import { FC, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../app/store/store';
+import { FC, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../app/store/store';
 import { createLogin } from './authPage.slice';
+import { useLocation, useNavigate } from 'react-router';
 
 interface IUser {
   email: string;
@@ -14,6 +15,21 @@ interface IUser {
 }
 
 const AuthPage: FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+
+  useEffect(() => {
+    if (location.pathname !== '/file-front/login') {
+      navigate('/file-front/login');
+    }
+
+    if (isAuth) {
+      navigate('/file-front');
+    }
+  }, [isAuth]);
+
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const dispatch: AppDispatch = useDispatch();
