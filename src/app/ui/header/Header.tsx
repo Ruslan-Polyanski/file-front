@@ -16,7 +16,7 @@ const Header: FC = () => {
     <>
       <header className={style.header}>
         <div className={style.logo}>
-          <Link to={'/'}>
+          <Link to={'/file-front'}>
             <Logo />
           </Link>
         </div>

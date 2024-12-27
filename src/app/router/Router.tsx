@@ -1,43 +1,27 @@
-import { createBrowserRouter } from 'react-router';
 import { Layout } from '../layout/Layout';
 import { ErrorPage } from '../../pages/error/ErrorPage';
 import { HomePage } from '../../pages/home/HomePage';
-import { ProfilePage } from '../../pages/profile/ProfilePage';
 import { EmployeesPage } from '../../pages/employees/EmployeesPage';
 import { CarPage } from '../../pages/car/CarPage';
 import { AuthPage } from '../../pages/auth/AuthPage';
+import { Route, Routes } from 'react-router';
 
-const router = createBrowserRouter(
-  [
-    {
-      path: '/',
-      element: <Layout />,
-      errorElement: <ErrorPage />,
-      children: [
-        {
-          index: true,
-          element: <HomePage />,
-        },
-        {
-          path: 'employees',
-          element: <EmployeesPage />,
-        },
-        {
-          path: 'car',
-          element: <CarPage />,
-        },
-        {
-          path: 'profile',
-          element: <ProfilePage />,
-        },
-      ],
-    },
-    {
-      path: 'login',
-      element: <AuthPage />,
-    },
-  ],
-  { basename: '/file-front' },
-);
+const Router = () => {
+  return (
+    <Routes>
+      <Route path="file-front">
+        <Route element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="employees" element={<EmployeesPage />} />
+          <Route path="car" element={<CarPage />} />
+        </Route>
 
-export { router };
+        <Route path="login" element={<AuthPage />} />
+      </Route>
+
+      <Route path="*" element={<ErrorPage />} />
+    </Routes>
+  );
+};
+
+export { Router };

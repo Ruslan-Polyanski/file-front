@@ -3,6 +3,7 @@ import { LocalStorage } from '../../shared/storage/localStorage';
 
 interface IAuthState {
   isAuth: boolean;
+  isLoader: boolean;
 }
 
 interface IUser {
@@ -18,25 +19,26 @@ interface IUserResponse {
 
 const initialAuthState: IAuthState = {
   isAuth: false,
+  isLoader: true,
 };
 
 export const authSlice = createSlice({
   name: '@@Auth',
   initialState: initialAuthState,
   reducers: {
-    logIn: (state) => {
-      return { ...state, isAuth: true };
+    setIsAuth: (state, action) => {
+      return { ...state, isAuth: action.payload };
     },
-    logOut: (state) => {
-      return { ...state, isAuth: false };
+    setIsLoader: (state, action) => {
+      return { ...state, isLoader: action.payload };
     },
   },
 });
 
-export const { logIn, logOut } = authSlice.actions;
+export const { setIsAuth, setIsLoader } = authSlice.actions;
 
 export const createLogin = createAsyncThunk(
-  '@@login/createLogin',
+  '@@Auth/createLogin',
   async (user: IUser, { dispatch }) => {
     fetch('http://localhost:3001/api/auth/login', {
       method: 'POST',
@@ -54,7 +56,7 @@ export const createLogin = createAsyncThunk(
       .then((data: IUserResponse) => {
         const { token } = data;
         LocalStorage.setItem('token', token);
-        dispatch(logIn());
+        dispatch(setIsAuth(true));
       })
       .catch((err) => {
         console.log(err);
@@ -62,10 +64,45 @@ export const createLogin = createAsyncThunk(
   },
 );
 
+export const createCheckAuth = createAsyncThunk(
+  '@@Auth/createCheckAuth',
+  async (_, { dispatch }) => {
+    const access_token = LocalStorage.getItem('token');
+
+    if (access_token) {
+      fetch('http://localhost:3001/api/auth/profile', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${access_token}`,
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            dispatch(setIsAuth(true));
+            return response.json();
+          } else {
+            throw new Error('Your token is destroy');
+          }
+        })
+        .then((data: Omit<IUserResponse, 'token'>) => {
+          const { id, email } = data;
+          console.log(id, email);
+        })
+        .catch((err) => console.log(err))
+        .finally(() => {
+          dispatch(setIsLoader(false));
+        });
+    } else {
+      dispatch(setIsLoader(false));
+    }
+  },
+);
+
 export const createLogOut = createAsyncThunk(
-  '@@login/createLogOut',
+  '@@Auth/createLogOut',
   async (_, { dispatch }) => {
     localStorage.removeItem('token');
-    dispatch(logOut());
+    dispatch(setIsAuth(false));
   },
 );
