@@ -40,7 +40,7 @@ export const { setIsAuth, setIsLoader } = authSlice.actions;
 export const createLogin = createAsyncThunk(
   '@@Auth/createLogin',
   async (user: IUser, { dispatch }) => {
-    fetch('/api/auth/login', {
+    fetch('http://localhost:3001/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ export const createCheckAuth = createAsyncThunk(
     const access_token = LocalStorage.getItem('token');
 
     if (access_token) {
-      fetch('/api/auth/profile', {
+      fetch('http://localhost:3001/api/auth/profile', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
