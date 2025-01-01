@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { LocalStorage } from '../../shared/storage/localStorage';
 
+const BASE_URL = 'http://localhost';
+
 interface IAuthState {
   isAuth: boolean;
   isLoader: boolean;
@@ -40,7 +42,7 @@ export const { setIsAuth, setIsLoader } = authSlice.actions;
 export const createLogin = createAsyncThunk(
   '@@Auth/createLogin',
   async (user: IUser, { dispatch }) => {
-    fetch('http://localhost:3001/api/auth/login', {
+    fetch(BASE_URL + '/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -70,7 +72,7 @@ export const createCheckAuth = createAsyncThunk(
     const access_token = LocalStorage.getItem('token');
 
     if (access_token) {
-      fetch('http://localhost:3001/api/auth/profile', {
+      fetch(BASE_URL + '/api/auth/profile', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
