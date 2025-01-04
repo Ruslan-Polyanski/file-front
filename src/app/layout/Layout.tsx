@@ -1,18 +1,17 @@
 import { FC } from 'react';
-import { Header } from '../ui/header/Header';
-import { Outlet } from 'react-router';
 import style from './Layout.module.css';
 
-const Layout: FC = () => {
+interface ILayoutProps {
+  header: React.ReactNode;
+  outlet: React.ReactNode;
+}
+
+const Layout: FC<ILayoutProps> = ({ header, outlet }) => {
   return (
     <>
-      <div className={style.header}>
-        <Header />
-      </div>
+      <header>{header}</header>
       <main>
-        <div className={style.box}>
-          <Outlet />
-        </div>
+        <div className={style.box}>{outlet}</div>
       </main>
     </>
   );
