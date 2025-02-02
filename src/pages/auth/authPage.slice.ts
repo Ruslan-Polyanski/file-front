@@ -6,6 +6,7 @@ const BASE_URL = 'http://localhost:3001';
 interface IAuthState {
   isAuth: boolean;
   isLoader: boolean;
+  errorAuth: string | null;
 }
 
 interface IUser {
@@ -22,6 +23,7 @@ interface IUserResponse {
 const initialAuthState: IAuthState = {
   isAuth: false,
   isLoader: true,
+  errorAuth: null,
 };
 
 export const authSlice = createSlice({
@@ -34,14 +36,18 @@ export const authSlice = createSlice({
     setIsLoader: (state, action) => {
       return { ...state, isLoader: action.payload };
     },
+    setEerrorAuth: (state, action) => {
+      return { ...state, errorAuth: action.payload };
+    },
   },
 });
 
-export const { setIsAuth, setIsLoader } = authSlice.actions;
+export const { setIsAuth, setIsLoader, setEerrorAuth } = authSlice.actions;
 
 export const createLogin = createAsyncThunk(
   '@@Auth/createLogin',
   async (user: IUser, { dispatch }) => {
+    dispatch(setIsLoader(true));
     fetch(BASE_URL + '/api/auth/login', {
       method: 'POST',
       headers: {
@@ -59,9 +65,13 @@ export const createLogin = createAsyncThunk(
         const { token } = data;
         LocalStorage.setItem('token', token);
         dispatch(setIsAuth(true));
+        dispatch(setEerrorAuth(null));
       })
       .catch((err) => {
-        console.log(err);
+        dispatch(setEerrorAuth(err.message));
+      })
+      .finally(() => {
+        dispatch(setIsLoader(false));
       });
   },
 );
@@ -72,29 +82,28 @@ export const createCheckAuth = createAsyncThunk(
     const access_token = LocalStorage.getItem('token');
 
     if (access_token) {
-      fetch(BASE_URL + '/api/auth/profile', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${access_token}`,
-        },
-      })
-        .then((response) => {
-          if (response.ok) {
-            dispatch(setIsAuth(true));
-            return response.json();
-          } else {
-            throw new Error('Your token is destroy');
-          }
-        })
-        .then((data: Omit<IUserResponse, 'token'>) => {
-          const { id, email } = data;
-          console.log(id, email);
-        })
-        .catch((err) => console.log(err))
-        .finally(() => {
-          dispatch(setIsLoader(false));
+      try {
+        const response = await fetch(BASE_URL + '/api/auth/profile', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${access_token}`,
+          },
         });
+
+        if (!response.ok) {
+          throw new Error('Your token is destroy');
+        }
+
+        dispatch(setIsAuth(true));
+        dispatch(setEerrorAuth(null));
+      } catch (error) {
+        if (error instanceof Error) {
+          dispatch(setEerrorAuth(error.message));
+        }
+      } finally {
+        dispatch(setIsLoader(false));
+      }
     } else {
       dispatch(setIsLoader(false));
     }
