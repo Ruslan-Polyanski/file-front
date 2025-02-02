@@ -1,8 +1,9 @@
-import { FC } from "react";
-import style from "./Sidebar.module.css";
+import { FC } from 'react';
+import style from './Sidebar.module.css';
 
 const Sidebar: FC = () => {
-  return <>
+  return (
+    <>
       <aside className={style.sidebar}>
         <ul>
           <li>Сотрудники</li>
@@ -11,7 +12,8 @@ const Sidebar: FC = () => {
           <li>Профиль</li>
         </ul>
       </aside>
-  </>;
-}
+    </>
+  );
+};
 
-export { Sidebar }
+export { Sidebar };

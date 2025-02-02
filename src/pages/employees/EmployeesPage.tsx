@@ -1,136 +1,54 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import style from './EmployeesPage.module.css';
-import { CardEmployee } from '../../shared/ui/cardEmployee/CardEmployee';
-import { IEmployee } from '../../shared/ui/cardEmployee/CardEmployee';
-
-interface IPreviewIEmployee extends IEmployee {
-  uniqueID: string;
-}
-
-type TEmployees = IPreviewIEmployee[];
-
-const mockEmployees = [
-  {
-    firstName: 'Игорь',
-    lastName: 'Петров',
-    surname: 'Петрович',
-    profession: 'Сварщик',
-    uniqueID: 'dfgsdf',
-    photo:
-      'https://optim.tildacdn.com/tild3831-3136-4039-b539-633061393531/-/resize/824x/-/format/webp/main-ph-1.jpg',
-  },
-  {
-    firstName: 'Анна',
-    lastName: 'Смирнова',
-    surname: 'Петрович',
-    profession: 'Менеджер',
-    uniqueID: 'yiruyi',
-    photo:
-      'https://optim.tildacdn.com/tild3831-3136-4039-b539-633061393531/-/resize/824x/-/format/webp/main-ph-1.jpg',
-  },
-  {
-    firstName: 'Дмитрий',
-    lastName: 'Кузнецов',
-    surname: 'Петрович',
-    profession: 'Программист',
-    uniqueID: 'kgjlfghjd',
-    photo:
-      'https://optim.tildacdn.com/tild3831-3136-4039-b539-633061393531/-/resize/824x/-/format/webp/main-ph-1.jpg',
-  },
-  {
-    firstName: 'Елена',
-    lastName: 'Сидорова',
-    surname: 'Петрович',
-    profession: 'Дизайнер',
-    uniqueID: 'w4wertw',
-    photo:
-      'https://optim.tildacdn.com/tild3831-3136-4039-b539-633061393531/-/resize/824x/-/format/webp/main-ph-1.jpg',
-  },
-  {
-    firstName: 'Максим',
-    lastName: 'Попов',
-    surname: 'Петрович',
-    profession: 'Инженер',
-    uniqueID: 'vnfkfhf',
-    photo:
-      'https://optim.tildacdn.com/tild3831-3136-4039-b539-633061393531/-/resize/824x/-/format/webp/main-ph-1.jpg',
-  },
-  {
-    firstName: 'Ольга',
-    lastName: 'Ковалёва',
-    surname: 'Петрович',
-    profession: 'Маркетолог',
-    uniqueID: 'wryetyerh',
-    photo:
-      'https://optim.tildacdn.com/tild3831-3136-4039-b539-633061393531/-/resize/824x/-/format/webp/main-ph-1.jpg',
-  },
-  {
-    firstName: 'Сергей',
-    lastName: 'Федоров',
-    surname: 'Петрович',
-    profession: 'Аналитик',
-    uniqueID: 'dsfgeertyreh',
-    photo:
-      'https://optim.tildacdn.com/tild3831-3136-4039-b539-633061393531/-/resize/824x/-/format/webp/main-ph-1.jpg',
-  },
-  {
-    firstName: 'Татьяна',
-    lastName: 'Лебедева',
-    surname: 'Петрович',
-    profession: 'Финансист',
-    uniqueID: 'sgwrjfgwdefg',
-    photo:
-      'https://optim.tildacdn.com/tild3831-3136-4039-b539-633061393531/-/resize/824x/-/format/webp/main-ph-1.jpg',
-  },
-  {
-    firstName: 'Алексей',
-    lastName: 'Мельников',
-    surname: 'Петрович',
-    profession: 'Юрист',
-    uniqueID: 'nmerthwer',
-    photo:
-      'https://optim.tildacdn.com/tild3831-3136-4039-b539-633061393531/-/resize/824x/-/format/webp/main-ph-1.jpg',
-  },
-  {
-    firstName: 'Мария',
-    lastName: 'Григорьева',
-    surname: 'Петрович',
-    profession: 'Учитель',
-    uniqueID: 'wrthwgeh',
-    photo:
-      'https://optim.tildacdn.com/tild3831-3136-4039-b539-633061393531/-/resize/824x/-/format/webp/main-ph-1.jpg',
-  },
-];
+import { CardEmployee } from './cardEmployee/CardEmployee';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../app/store/store';
+import { getEmployeesData } from './employeesPage.slice';
 
 const EmployeesPage: FC = () => {
-  const [employees, setEemployees] = useState<TEmployees | []>([]);
+  const users = useSelector((state: RootState) => state.employees.users);
+  const companies = useSelector(
+    (state: RootState) => state.employees.companies,
+  );
+  const equipments = useSelector(
+    (state: RootState) => state.employees.equipments,
+  );
+  const supervisors = useSelector(
+    (state: RootState) => state.employees.supervisors,
+  );
+
+  const isLoaderPage = useSelector(
+    (state: RootState) => state.employees.isLoaderPage,
+  );
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
-    fetch('/someURL', {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json;charset=UTF-8',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setEemployees(data))
-      .catch((error) => console.log(error));
-
-    setEemployees(mockEmployees); // временно пока нет сервера
+    dispatch(getEmployeesData());
   }, []);
 
   return (
     <>
+      {isLoaderPage && 'Loader...'}
+
       <h1>Отметить сотрудников</h1>
       <article className={style.employees__box}>
-        {employees.map((employee) => (
+        {users.map((employee) => (
           <CardEmployee
-            key={employee.uniqueID}
+            key={employee.id}
+            id={employee.id}
             profession={employee.profession}
             photo={employee.photo}
-            firstName={employee.firstName}
-            lastName={employee.lastName}
-            surname={employee.surname}
+            fullName={employee.fullName}
+            companies={companies}
+            equipments={equipments}
+            supervisors={supervisors}
+            equipment={employee.equipment}
+            supervisor={employee.supervisor}
+            company={employee.company}
+            dateTag={employee.dateTag}
+            startTime={employee.startTime}
+            endTime={employee.endTime}
+            breakTime={employee.breakTime}
           />
         ))}
       </article>

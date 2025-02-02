@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import style from './LogOut.module.css';
+import style from './LogOutButton.module.css';
 
-interface IPropsLogOut {
+interface IPropsLogOutButton {
   callBack: () => void;
 }
 
-const LogOut: FC<IPropsLogOut> = ({ callBack }) => {
+const LogOutButton: FC<IPropsLogOutButton> = ({ callBack }) => {
   return (
     <>
       <button className={style.bg} onClick={callBack}>
@@ -15,4 +15,4 @@ const LogOut: FC<IPropsLogOut> = ({ callBack }) => {
   );
 };
 
-export { LogOut };
+export { LogOutButton };

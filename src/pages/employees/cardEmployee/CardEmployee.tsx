@@ -8,43 +8,84 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-console.log(<DatePicker />);
-const mickFactories = [
-  'Минский моторный завод',
-  'Минский тракторный завод',
-  'Минский автомобильный завод',
-  'Борисовский завод агрегатов',
-  'Гомсельмаш',
-  'Амкодор-Унимод',
-];
+import { SaveEmloyeeButton } from '../../../shared/ui/buttons/saveEmployee/SaveEmloyeeButton';
+// import { saveEmployeeData } from '../employeesPage.slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../../app/store/store';
+import { saveEmployeeData } from '../employeesPage.slice';
 
 export interface IEmployee {
-  firstName: string;
-  lastName: string;
-  surname: string;
+  id: number;
+  fullName: string;
   profession: string;
   photo: string;
+  equipment: string | null;
+  supervisor: string | null;
+  company: string | null;
+  dateTag: string | null;
+  startTime: null | string;
+  endTime: null | string;
+  breakTime: null | string;
+  companies: { id: number; title: string }[];
+  equipments: { id: number; title: string }[];
+  supervisors: { id: number; fullName: string }[];
 }
-
+// 1736834400000
 const CardEmployee: FC<IEmployee> = ({
   photo,
   profession,
-  firstName,
-  lastName,
-  surname,
+  fullName,
+  companies,
+  equipments,
+  supervisors,
+  equipment,
+  supervisor,
+  company,
+  dateTag,
+  id,
+  startTime,
+  endTime,
+  breakTime,
 }) => {
+  const dispatch: AppDispatch = useDispatch();
+  const isSavingCardEmployee = useSelector((state: RootState) =>
+    state.employees.isSavingCardEmployee.includes(id),
+  );
   const [startDate, setStartDate] = useState<Date | null>(
-    setHours(setMinutes(new Date(), 30), 8),
+    typeof startTime === 'string'
+      ? new Date(+startTime)
+      : setHours(setMinutes(new Date(), 30), 8),
   );
   const [endDate, setEndDate] = useState<Date | null>(
-    setHours(setMinutes(new Date(), 15), 17),
+    typeof endTime === 'string'
+      ? new Date(+endTime)
+      : setHours(setMinutes(new Date(), 15), 17),
   );
   const [breakDate, setBreakDate] = useState<Date | null>(
-    setHours(setMinutes(new Date(), 45), 0),
+    typeof breakTime === 'string'
+      ? new Date(+breakTime)
+      : setHours(setMinutes(new Date(), 45), 0),
   );
   const [hideBoxTimeSetters, setРideBoxTimeSetters] = useState<boolean>(false);
 
-  const altText = `${firstName} ${lastName} ${surname}`;
+  const [companyValue, setCompanyValue] = useState<string | null>(
+    company ?? '',
+  );
+  const [inputCompanyValue, setInputCompanyValue] = useState(company ?? '');
+
+  const [equipmentValue, setEquipmentValue] = useState<string | null>(
+    equipment ?? '',
+  );
+  const [inputEquipmentValue, setInputEquipmentValue] = useState(
+    equipment ?? '',
+  );
+
+  const [supervisorValue, setSupervisorValue] = useState<string | null>(
+    supervisor ?? '',
+  );
+  const [inputSupervisorValue, setInputSupervisorValue] = useState(
+    supervisor ?? '',
+  );
 
   function handleFormControlLabel(
     event: React.SyntheticEvent,
@@ -53,16 +94,35 @@ const CardEmployee: FC<IEmployee> = ({
     setРideBoxTimeSetters(checked);
   }
 
+  const handleSaveCardEmployee = () => {
+    const getDateToday = (date: Date) => {
+      return `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
+    };
+
+    const dataEmployee = {
+      dataTag: getDateToday(new Date()),
+      id,
+      fullName,
+      profession,
+      startDate: startDate && String(+startDate),
+      endDate: endDate && String(+endDate),
+      breakDate: breakDate && String(+breakDate),
+      companyValue,
+      equipmentValue,
+      supervisorValue,
+    };
+
+    dispatch(saveEmployeeData(dataEmployee));
+  };
+
   return (
     <section className={style.employee__box}>
       <div className={style.imageBox}>
-        <img src={photo} alt={altText} />
+        <img src={photo} alt={fullName} />
         <div className={style.profession}>{profession}</div>
       </div>
       <div className={style.mainBoxTime}>
-        <h2 className={style.h2}>
-          {firstName} {lastName} {surname}
-        </h2>
+        <h2 className={style.h2}>{fullName}</h2>
         <div className={style.timeBox}>
           <div className={style.changeStatus}>
             <h3>Рабочее время</h3>
@@ -130,8 +190,16 @@ const CardEmployee: FC<IEmployee> = ({
       <div className={style['autocomplete-box']}>
         <div className={style['options-box']}>
           <Autocomplete
+            value={companyValue}
+            onChange={(event, newValue: string | null) => {
+              setCompanyValue(newValue);
+            }}
+            inputValue={inputCompanyValue}
+            onInputChange={(event, newInputValue) => {
+              setInputCompanyValue(newInputValue);
+            }}
             disablePortal
-            options={mickFactories}
+            options={companies.map((item) => item.title)}
             sx={{ width: 250 }}
             renderInput={(params) => (
               <TextField {...params} label="Место проведения работ" />
@@ -140,14 +208,16 @@ const CardEmployee: FC<IEmployee> = ({
         </div>
         <div className={style['options-box']}>
           <Autocomplete
+            value={equipmentValue}
+            onChange={(event, newValue: string | null) => {
+              setEquipmentValue(newValue);
+            }}
+            inputValue={inputEquipmentValue}
+            onInputChange={(event, newInputValue) => {
+              setInputEquipmentValue(newInputValue);
+            }}
             disablePortal
-            options={[
-              'ИФДС5190',
-              'ИФДС5297',
-              'ИФДС5493',
-              'ИФДС5518',
-              'ИФДС5519',
-            ]}
+            options={equipments.map((item) => item.title)}
             sx={{ width: 250 }}
             renderInput={(params) => (
               <TextField {...params} label="Технологический объект" />
@@ -156,14 +226,16 @@ const CardEmployee: FC<IEmployee> = ({
         </div>
         <div className={style['options-box']}>
           <Autocomplete
+            value={supervisorValue}
+            onChange={(event, newValue: string | null) => {
+              setSupervisorValue(newValue);
+            }}
+            inputValue={inputSupervisorValue}
+            onInputChange={(event, newInputValue) => {
+              setInputSupervisorValue(newInputValue);
+            }}
             disablePortal
-            options={[
-              'Игорь Петров Петрович',
-              'Кузнецов Пертов Петрович',
-              'Демко Игорь Михайлович',
-              'Сашко Олег Никифорович',
-              'Осулин Виктор Иванович',
-            ]}
+            options={supervisors.map((item) => item.fullName)}
             sx={{ width: 250 }}
             renderInput={(params) => (
               <TextField {...params} label="Руководитель проекта" />
@@ -171,6 +243,13 @@ const CardEmployee: FC<IEmployee> = ({
           />
         </div>
       </div>
+      <SaveEmloyeeButton
+        callBack={handleSaveCardEmployee}
+        isDisabled={isSavingCardEmployee}
+      >
+        {dateTag ? 'Обновить' : 'Сохранить'}
+      </SaveEmloyeeButton>
+      {isSavingCardEmployee && <div>Загрузка</div>}
     </section>
   );
 };
