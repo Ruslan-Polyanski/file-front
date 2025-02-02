@@ -8,8 +8,6 @@ import { Outlet } from 'react-router';
 import { AuthPage } from '../../pages/auth/AuthPage';
 
 const LayoutCheckAuth: FC = () => {
-  console.log('baselayout');
-
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const isLoader = useSelector((state: RootState) => state.auth.isLoader);
   const dispatch: AppDispatch = useDispatch();

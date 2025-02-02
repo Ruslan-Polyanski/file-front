@@ -5,7 +5,6 @@ const LocalStorage = {
       const value = localStorage.getItem(key) ?? '';
       result = JSON.parse(value);
     } catch (err) {
-      console.log(err);
       result = null;
     }
     return result;
