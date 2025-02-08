@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { LocalStorage } from '../../shared/storage/localStorage';
+import { API } from '../../shared/api/api';
 
 const BASE_URL = 'http://localhost:3001';
 
@@ -139,46 +140,12 @@ export const getEmployeesData = createAsyncThunk(
     dispatch(setIsLoaderPage(true));
 
     if (access_token) {
-      const promise1 = fetch(BASE_URL + '/api/companies', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${access_token}`,
-        },
-      });
-
-      const promise2 = fetch(BASE_URL + '/api/equipments', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${access_token}`,
-        },
-      });
-
-      const promise3 = fetch(BASE_URL + '/api/levels/supervisors', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${access_token}`,
-        },
-      });
-
-      const promise4 = fetch(BASE_URL + '/api/date/today', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${access_token}`,
-        },
-      });
-
-      const response = await Promise.all([
-        promise1,
-        promise2,
-        promise3,
-        promise4,
+      const data = await Promise.all([
+        API.getCompanies(access_token),
+        API.getEquipments(access_token),
+        API.getSupervisors(access_token),
+        API.getTodayEmployees(access_token),
       ]);
-
-      const data = await Promise.all(response.map((result) => result.json()));
 
       data.forEach((item) => {
         if (item.companies) dispatch(setCompanies(item.companies));
