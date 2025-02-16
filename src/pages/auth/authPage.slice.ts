@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { LocalStorage } from '../../shared/storage/localStorage';
 
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = process.env.REACT_APP_ENV_FILE_BASE_URL_SERVER;
 
 interface IAuthState {
   isAuth: boolean;
