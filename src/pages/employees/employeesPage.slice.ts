@@ -103,7 +103,6 @@ export const saveEmployeeData = createAsyncThunk(
   async (employee: IUsersRequest, { dispatch }) => {
     const access_token = LocalStorage.getItem('token');
 
-    console.log(employee.id);
 
     if (access_token) {
       try {
@@ -125,7 +124,7 @@ export const saveEmployeeData = createAsyncThunk(
         const resp = await response.json();
         console.log(resp);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       } finally {
         dispatch(setIsSavingCardEmployee(employee.id));
       }
