@@ -1,4 +1,4 @@
-const BASE_URL = process.env.REACT_APP_ENV_FILE_BASE_URL_SERVER;
+const BASE_URL = 'http://89.111.153.176';
 
 type TToken = string;
 

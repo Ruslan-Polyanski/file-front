@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { LocalStorage } from '../../shared/storage/localStorage';
 import { API } from '../../shared/api/api';
 
-const BASE_URL = process.env.REACT_APP_ENV_FILE_BASE_URL_SERVER;
+const BASE_URL = 'http://89.111.153.176';
 
 interface ICompany {
   id: number;
