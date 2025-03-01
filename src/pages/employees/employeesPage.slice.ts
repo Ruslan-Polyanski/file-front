@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { LocalStorage } from '../../shared/storage/localStorage';
+import { access_token } from '../../shared/storage/localStorage';
 import { API } from '../../shared/api/api';
+import { RootState } from '../../app/store/store';
 
 const BASE_URL = 'http://89.111.153.176';
 
@@ -100,50 +101,42 @@ const {
 
 export const saveEmployeeData = createAsyncThunk(
   '@@employees/saveEmployeeData',
-  async (employee: IUsersRequest, { dispatch }) => {
-    const access_token = LocalStorage.getItem('token');
-
-
-    if (access_token) {
+  async (employee: IUsersRequest, { dispatch , getState}) => {
       try {
         dispatch(setIsSavingCardEmployee(employee.id));
 
-        const response = await fetch(BASE_URL + '/api/date/today', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${access_token}`,
-          },
-          body: JSON.stringify(employee),
-        });
+        const response = await API.updateTodayEmployees(employee)
 
-        if (!response.ok) {
-          throw new Error('Break our request');
-        }
+        const {employees: { users }} = getState() as RootState; 
+        
+        const updateUsers = users.map(user => {
+          if(user.id !== response.id) {
+            return user;
+          } 
+          return{...user, ...response}
+        })
 
-        const resp = await response.json();
-        console.log(resp);
+        dispatch(setUsers(updateUsers))
+        
       } catch (error) {
-        // console.log(error);
+        console.log(error);
       } finally {
         dispatch(setIsSavingCardEmployee(employee.id));
       }
-    }
   },
 );
 
 export const getEmployeesData = createAsyncThunk(
   '@@employees/getEmployeesData',
   async (_, { dispatch }) => {
-    const access_token = LocalStorage.getItem('token');
+    const accessToken = access_token.get();
     dispatch(setIsLoaderPage(true));
-
-    if (access_token) {
+    if (accessToken) {
       const data = await Promise.all([
-        API.getCompanies(access_token),
-        API.getEquipments(access_token),
-        API.getSupervisors(access_token),
-        API.getTodayEmployees(access_token),
+        API.getCompanies(),
+        API.getEquipments(),
+        API.getSupervisors(),
+        API.getTodayEmployees(),
       ]);
 
       data.forEach((item) => {

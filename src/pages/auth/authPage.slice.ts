@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { LocalStorage } from '../../shared/storage/localStorage';
+import { access_token } from '../../shared/storage/localStorage';
 
 const BASE_URL = 'http://89.111.153.176';
 
@@ -56,6 +56,7 @@ export const createLogin = createAsyncThunk(
       body: JSON.stringify(user),
     })
       .then((response) => {
+        console.log(response)
         if (!response.ok) {
           throw new Error('You are not authorized');
         }
@@ -63,7 +64,7 @@ export const createLogin = createAsyncThunk(
       })
       .then((data: IUserResponse) => {
         const { token } = data;
-        LocalStorage.setItem('token', token);
+        access_token.set(token)
         dispatch(setIsAuth(true));
         dispatch(setEerrorAuth(null));
       })
@@ -79,19 +80,19 @@ export const createLogin = createAsyncThunk(
 export const createCheckAuth = createAsyncThunk(
   '@@Auth/createCheckAuth',
   async (_, { dispatch }) => {
-    const access_token = LocalStorage.getItem('token');
-
-    if (access_token) {
+    const accessToken = access_token.get();
+    if (accessToken) {
       try {
         const response = await fetch(BASE_URL + '/api/auth/profile', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
-
+        
         if (!response.ok) {
+          console.log(response)
           throw new Error('Your token is destroy');
         }
 
@@ -113,7 +114,7 @@ export const createCheckAuth = createAsyncThunk(
 export const createLogOut = createAsyncThunk(
   '@@Auth/createLogOut',
   async (_, { dispatch }) => {
-    localStorage.removeItem('token');
+    access_token.delete()
     dispatch(setIsAuth(false));
   },
 );

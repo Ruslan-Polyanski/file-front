@@ -1,87 +1,21 @@
-const BASE_URL = 'http://89.111.153.176';
-
-type TToken = string;
+import { axioses } from "./axioses";
 
 const API = {
-  getCompanies: async (access_token: TToken) => {
-    const response = await fetch(BASE_URL + '/api/companies', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Status text: ${response.statusText}, 
-        status: ${response.status}, 
-        response url: ${response.url}`,
-      );
-    }
-
-    return await response.json();
+  async getCompanies() {
+    return await axioses.get('/api/companies');
   },
-
-  getEquipments: async (access_token: TToken) => {
-    const response = await fetch(BASE_URL + '/api/equipments', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Status text: ${response.statusText}, 
-        status: ${response.status}, 
-        response url: ${response.url}`,
-      );
-    }
-
-    return await response.json();
+  async getEquipments() {
+    return await axioses.get('/api/equipments')
   },
-
-  getSupervisors: async (access_token: TToken) => {
-    const response = await fetch(BASE_URL + '/api/levels/supervisors', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Status text: ${response.statusText}, 
-        status: ${response.status}, 
-        response url: ${response.url}`,
-      );
-    }
-
-    return await response.json();
+  async getSupervisors() {
+    return await axioses.get('/api/levels/supervisors')
   },
-
-  getTodayEmployees: async (access_token: TToken) => {
-    const response = await fetch(BASE_URL + '/api/date/today', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Status text: ${response.statusText}, 
-        status: ${response.status}, 
-        response url: ${response.url}`,
-      );
-    }
-
-    return await response.json();
+  async getTodayEmployees() {
+    return await axioses.get('/api/date/today')
   },
+  async updateTodayEmployees(body: Record<string, unknown>) {
+    return await axioses.patch('/api/date/today', body)
+  }
 };
 
 export { API };

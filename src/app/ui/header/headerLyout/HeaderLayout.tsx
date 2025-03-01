@@ -1,5 +1,6 @@
 import style from './HeaderLayout.module.css';
 import { FC } from 'react';
+import React from 'react';
 
 interface IHeaderLayout {
   menu: React.ReactNode;
