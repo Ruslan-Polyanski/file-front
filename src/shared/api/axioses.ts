@@ -1,6 +1,7 @@
 import { access_token, LocalStorage } from "../storage/localStorage";
 
-const BASE_URL = 'http://89.111.153.176';
+// const BASE_URL = 'http://89.111.153.176';
+const BASE_URL = 'http://localhost:3001';
 
 const METHOD = {
     GET: 'GET',
@@ -19,7 +20,7 @@ class API {
         this.accessToken = access_token;
     }
 
-    private async fetcher(path: string, method: string, body?: Record<string, unknown>): Promise<any> {
+    private async fetcher<T>(path: string, method: string, body?: T): Promise<any> {
         const accessToken = this.accessToken.get();
 
         if(accessToken) {
@@ -51,15 +52,15 @@ class API {
         return await this.fetcher(path, METHOD.GET)
     }
 
-    public async post(path: string, body: Record<string, unknown>) {
+    public async post<T>(path: string, body: T) {
         return await this.fetcher(path, METHOD.POST, body)
     }
 
-    public async put(path: string, body: Record<string, unknown>) {
+    public async put<T>(path: string, body: T) {
         return await this.fetcher(path, METHOD.PUT, body)
     }
 
-    public async patch(path: string, body: Record<string, unknown>) {
+    public async patch<T>(path: string, body: T) {
         return await this.fetcher(path, METHOD.PATCH, body)
     }
     
