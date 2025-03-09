@@ -8,4 +8,4 @@ const HomePage: FC = () => {
   );
 };
 
-export { HomePage };
+export { HomePage }

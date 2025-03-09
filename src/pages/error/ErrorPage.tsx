@@ -10,7 +10,7 @@ const ErrorPage: FC = () => {
         <img src={img} alt="not found" />
       </div>
       <div className={style.link}>
-        <Link to="/file-front">Вернуться на гравную</Link>
+        <Link to="/">Вернуться на гравную</Link>
       </div>
     </div>
   );

@@ -13,9 +13,15 @@ const API = {
   async getTodayEmployees() {
     return await axioses.get('/api/date/today')
   },
-  async updateTodayEmployees(body: Record<string, unknown>) {
+  async checkValidationToken() {
+    return await axioses.get('/api/auth/profile')
+  },
+  // async logInAndGetToken<T>(body: T) {
+  //   return await axioses.post('/api/auth/login', body)
+  // },
+  async updateTodayEmployees<T>(body: T) {
     return await axioses.patch('/api/date/today', body)
-  }
+  },
 };
 
 export { API };

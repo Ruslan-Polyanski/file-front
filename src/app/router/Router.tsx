@@ -11,13 +11,12 @@ import { LayoutCheckAuth } from '../layout/LayoutCheckAuth';
 const Router = () => {
   return (
     <Routes>
-      <Route path="file-front" element={<LayoutCheckAuth />}>
+      <Route path="/" element={<LayoutCheckAuth />}>
         <Route element={<LayoutBase header={<Header />} outlet={<Outlet />} />}>
           <Route index element={<HomePage />} />
           <Route path="employees" element={<EmployeesPage />} />
           <Route path="car" element={<CarPage />} />
         </Route>
-
         <Route path="login" element={<AuthPage />} />
       </Route>
 

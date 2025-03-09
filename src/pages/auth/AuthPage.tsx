@@ -23,12 +23,12 @@ const AuthPage: FC = () => {
   const errorAuth = useSelector((state: RootState) => state.auth.errorAuth);
 
   useEffect(() => {
-    if (location.pathname !== '/file-front/login') {
-      navigate('/file-front/login');
+    if (location.pathname !== '/login') {
+      navigate('/login');
     }
 
     if (isAuth) {
-      navigate('/file-front');
+      navigate('/');
     }
   }, [isAuth]);
 

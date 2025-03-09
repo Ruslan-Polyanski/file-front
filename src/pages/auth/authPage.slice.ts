@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { access_token } from '../../shared/storage/localStorage';
-
-const BASE_URL = 'http://89.111.153.176';
+import { API } from '../../shared/api/api';
 
 interface IAuthState {
   isAuth: boolean;
@@ -48,7 +47,7 @@ export const createLogin = createAsyncThunk(
   '@@Auth/createLogin',
   async (user: IUser, { dispatch }) => {
     dispatch(setIsLoader(true));
-    fetch(BASE_URL + '/api/auth/login', {
+    fetch('http://localhost:3001' + '/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -80,22 +79,8 @@ export const createLogin = createAsyncThunk(
 export const createCheckAuth = createAsyncThunk(
   '@@Auth/createCheckAuth',
   async (_, { dispatch }) => {
-    const accessToken = access_token.get();
-    if (accessToken) {
-      try {
-        const response = await fetch(BASE_URL + '/api/auth/profile', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        
-        if (!response.ok) {
-          console.log(response)
-          throw new Error('Your token is destroy');
-        }
-
+    try {
+        const response = await API.checkValidationToken();
         dispatch(setIsAuth(true));
         dispatch(setEerrorAuth(null));
       } catch (error) {
@@ -105,10 +90,7 @@ export const createCheckAuth = createAsyncThunk(
       } finally {
         dispatch(setIsLoader(false));
       }
-    } else {
-      dispatch(setIsLoader(false));
-    }
-  },
+    } 
 );
 
 export const createLogOut = createAsyncThunk(
