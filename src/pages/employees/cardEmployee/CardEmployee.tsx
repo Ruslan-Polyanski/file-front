@@ -1,18 +1,13 @@
 import { FC, useState } from 'react';
 import style from './CardEmployee.module.css';
-import DatePicker from 'react-datepicker';
-import { setHours } from 'date-fns/setHours';
-import { setMinutes } from 'date-fns/setMinutes';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import { SaveEmloyeeButton } from '../../../shared/ui/buttons/saveEmployee/SaveEmloyeeButton';
-// import { saveEmployeeData } from '../employeesPage.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../app/store/store';
 import { saveEmployeeData } from '../employeesPage.slice';
+import { UiInputTime } from '../ui/ui-input-time';
 
 export interface IEmployee {
   id: number;
@@ -30,7 +25,7 @@ export interface IEmployee {
   equipments: { id: number; title: string }[];
   supervisors: { id: number; fullName: string }[];
 }
-// 1736834400000
+
 const CardEmployee: FC<IEmployee> = ({
   photo,
   profession,
@@ -51,26 +46,13 @@ const CardEmployee: FC<IEmployee> = ({
   const isSavingCardEmployee = useSelector((state: RootState) =>
     state.employees.isSavingCardEmployee.includes(id),
   );
-  const [startDate, setStartDate] = useState<Date | null>(
-    typeof startTime === 'string'
-      ? new Date(+startTime)
-      : setHours(setMinutes(new Date(), 30), 8),
-  );
-  const [endDate, setEndDate] = useState<Date | null>(
-    typeof endTime === 'string'
-      ? new Date(+endTime)
-      : setHours(setMinutes(new Date(), 15), 17),
-  );
-  const [breakDate, setBreakDate] = useState<Date | null>(
-    typeof breakTime === 'string'
-      ? new Date(+breakTime)
-      : setHours(setMinutes(new Date(), 45), 0),
-  );
+
   const [hideBoxTimeSetters, setРideBoxTimeSetters] = useState<boolean>(false);
 
   const [companyValue, setCompanyValue] = useState<string | null>(
     company ?? '',
   );
+  
   const [inputCompanyValue, setInputCompanyValue] = useState(company ?? '');
 
   const [equipmentValue, setEquipmentValue] = useState<string | null>(
@@ -104,9 +86,9 @@ const CardEmployee: FC<IEmployee> = ({
       id,
       fullName,
       profession,
-      startDate: startDate && String(+startDate),
-      endDate: endDate && String(+endDate),
-      breakDate: breakDate && String(+breakDate),
+      // startDate: startDate && String(+startDate),
+      // endDate: endDate && String(+endDate),
+      // breakDate: breakDate && String(+breakDate),
       companyValue,
       equipmentValue,
       supervisorValue,
@@ -136,59 +118,44 @@ const CardEmployee: FC<IEmployee> = ({
           </div>
           {hideBoxTimeSetters ? null : (
             <div className={style.boxTimeSetters}>
-              <div className={style.timeSetter}>
-                <span>Начало</span>
-                <div>
-                  <DatePicker
-                    selected={startDate}
-                    onChange={(date) => setStartDate(date)}
-                    showTimeSelect
-                    showTimeSelectOnly
-                    timeIntervals={15}
-                    dateFormat="HH:mm"
-                    showTimeCaption={false}
-                    locale="ru"
-                  />
-                </div>
-              </div>
-              <div className={style.timeSetter}>
-                <span>Конец</span>
-                <div>
-                  <DatePicker
-                    selected={endDate}
-                    onChange={(date) => setEndDate(date)}
-                    showTimeSelect
-                    showTimeSelectOnly
-                    timeIntervals={15}
-                    dateFormat="HH:mm"
-                    showTimeCaption={false}
-                    locale="ru"
-                  />
-                </div>
-              </div>
-              <div className={style.timeSetter}>
-                <span>Перерыв</span>
-                <div>
-                  <DatePicker
-                    selected={breakDate}
-                    onChange={(date) => setBreakDate(date)}
-                    showTimeSelect
-                    showTimeSelectOnly
-                    timeIntervals={15}
-                    dateFormat="HH:mm"
-                    minTime={setHours(setMinutes(new Date(), 0), 0)}
-                    maxTime={setHours(setMinutes(new Date(), 0), 4)}
-                    showTimeCaption={false}
-                    locale="ru"
-                  />
-                </div>
-              </div>
+              <UiInputTime 
+                  title={'Начало'} 
+                  dataTime={startTime}
+                  dateFormat="HH:mm"
+                  hours={8}
+                  minutes={30}
+                  interval={15}
+                  timeCaption={false}
+                  locale="ru"
+              />
+              <UiInputTime 
+                  title={'Конец'} 
+                  dataTime={endTime}
+                  dateFormat="HH:mm"
+                  hours={17}
+                  minutes={15}
+                  interval={15}
+                  timeCaption={false}
+                  locale="ru"
+              />
+              <UiInputTime 
+                  title={'Перерыв'} 
+                  dataTime={breakTime}
+                  dateFormat="HH:mm"
+                  hours={0}
+                  minutes={45}
+                  interval={15}
+                  minTime={[0, 0]}
+                  maxTime={[4, 0]}
+                  timeCaption={false}
+                  locale="ru"
+              />
             </div>
           )}
         </div>
       </div>
       <div className={style['autocomplete-box']}>
-        <div className={style['options-box']}>
+        <div>
           <Autocomplete
             value={companyValue}
             onChange={(event, newValue: string | null) => {
@@ -206,7 +173,7 @@ const CardEmployee: FC<IEmployee> = ({
             )}
           />
         </div>
-        <div className={style['options-box']}>
+        <div>
           <Autocomplete
             value={equipmentValue}
             onChange={(event, newValue: string | null) => {
@@ -224,7 +191,7 @@ const CardEmployee: FC<IEmployee> = ({
             )}
           />
         </div>
-        <div className={style['options-box']}>
+        <div>
           <Autocomplete
             value={supervisorValue}
             onChange={(event, newValue: string | null) => {

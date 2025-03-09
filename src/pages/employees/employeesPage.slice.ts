@@ -1,9 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { access_token } from '../../shared/storage/localStorage';
 import { API } from '../../shared/api/api';
 import { RootState } from '../../app/store/store';
-
-const BASE_URL = 'http://89.111.153.176';
 
 interface ICompany {
   id: number;
@@ -129,9 +126,8 @@ export const saveEmployeeData = createAsyncThunk(
 export const getEmployeesData = createAsyncThunk(
   '@@employees/getEmployeesData',
   async (_, { dispatch }) => {
-    const accessToken = access_token.get();
     dispatch(setIsLoaderPage(true));
-    if (accessToken) {
+
       const data = await Promise.all([
         API.getCompanies(),
         API.getEquipments(),
@@ -147,8 +143,5 @@ export const getEmployeesData = createAsyncThunk(
       });
 
       dispatch(setIsLoaderPage(false));
-    } else {
-      dispatch(setIsLoaderPage(false));
-    }
   },
 );

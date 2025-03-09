@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "homepage": "https://ruslan-polyanski.github.io/file-front/",
+  "homepage": "https://ruslan-polyanski.github.io/",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-methods": "^7.18.6",

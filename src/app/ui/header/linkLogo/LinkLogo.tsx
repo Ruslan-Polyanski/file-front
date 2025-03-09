@@ -5,7 +5,7 @@ import { Logo } from '../../../../shared/ui/logo/Logo';
 const LinkLogo = () => {
   return (
     <div className={style.logo}>
-      <Link to={'/file-front'}>
+      <Link to={'/'}>
         <Logo />
       </Link>
     </div>
