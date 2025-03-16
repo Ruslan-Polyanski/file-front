@@ -35,65 +35,52 @@ export const authSlice = createSlice({
     setIsLoader: (state, action) => {
       return { ...state, isLoader: action.payload };
     },
-    setEerrorAuth: (state, action) => {
+    setErrorAuth: (state, action) => {
       return { ...state, errorAuth: action.payload };
     },
   },
 });
 
-export const { setIsAuth, setIsLoader, setEerrorAuth } = authSlice.actions;
+export const { setIsAuth, setIsLoader, setErrorAuth } = authSlice.actions;
 
-export const createLogin = createAsyncThunk(
+export const logIn = createAsyncThunk(
   '@@Auth/createLogin',
   async (user: IUser, { dispatch }) => {
     dispatch(setIsLoader(true));
-    fetch('http://localhost:3001' + '/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    })
-      .then((response) => {
-        console.log(response)
-        if (!response.ok) {
-          throw new Error('You are not authorized');
-        }
-        return response.json();
-      })
-      .then((data: IUserResponse) => {
-        const { token } = data;
-        access_token.set(token)
-        dispatch(setIsAuth(true));
-        dispatch(setEerrorAuth(null));
-      })
-      .catch((err) => {
-        dispatch(setEerrorAuth(err.message));
-      })
-      .finally(() => {
-        dispatch(setIsLoader(false));
-      });
-  },
+    try {
+      const data: IUserResponse = await API.logIn(user)
+      const { token } = data;
+      access_token.set(token)
+      dispatch(setIsAuth(true));
+      dispatch(setErrorAuth(null));
+    } catch (error) {
+      if (error instanceof Error) {
+        dispatch(setErrorAuth(error.message));
+      }
+    } finally {
+      dispatch(setIsLoader(false));
+    }
+  }
 );
 
-export const createCheckAuth = createAsyncThunk(
+export const checkAuth = createAsyncThunk(
   '@@Auth/createCheckAuth',
   async (_, { dispatch }) => {
-    try {
-        const response = await API.checkValidationToken();
-        dispatch(setIsAuth(true));
-        dispatch(setEerrorAuth(null));
-      } catch (error) {
-        if (error instanceof Error) {
-          dispatch(setEerrorAuth(error.message));
+      try {
+          await API.checkValidationToken();
+          dispatch(setIsAuth(true));
+          dispatch(setErrorAuth(null));
+        } catch (error) {
+          if (error instanceof Error) {
+            dispatch(setErrorAuth(error.message));
+          }
+        } finally {
+          dispatch(setIsLoader(false));
         }
-      } finally {
-        dispatch(setIsLoader(false));
-      }
-    } 
+    }
 );
 
-export const createLogOut = createAsyncThunk(
+export const logOut = createAsyncThunk(
   '@@Auth/createLogOut',
   async (_, { dispatch }) => {
     access_token.delete()
