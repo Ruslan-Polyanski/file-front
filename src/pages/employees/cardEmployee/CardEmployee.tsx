@@ -8,8 +8,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../app/store/store';
 import { saveEmployeeData } from '../employeesPage.slice';
 import { UiInputTime } from '../ui/ui-input-time';
+import { setHours, setMinutes } from 'date-fns';
+import { Autocomplete, TextField } from '@mui/material';
+import { UiSquare } from '../../../shared/ui/square/UiSquare';
 
-export interface IEmployee {
+interface IEmployee {
   id: number;
   fullName: string;
   profession: string;
@@ -21,62 +24,57 @@ export interface IEmployee {
   startTime: null | string;
   endTime: null | string;
   breakTime: null | string;
+}
+
+export interface ICardEmployee {
   companies: { id: number; title: string }[];
   equipments: { id: number; title: string }[];
   supervisors: { id: number; fullName: string }[];
+  employee: IEmployee;
 }
 
-const CardEmployee: FC<IEmployee> = ({
-  photo,
-  profession,
-  fullName,
+const CardEmployee: FC<ICardEmployee> = ({
   companies,
   equipments,
   supervisors,
-  equipment,
-  supervisor,
-  company,
-  dateTag,
-  id,
-  startTime,
-  endTime,
-  breakTime,
+  employee,
 }) => {
   const dispatch: AppDispatch = useDispatch();
-  const isSavingCardEmployee = useSelector((state: RootState) =>
-    state.employees.isSavingCardEmployee.includes(id),
-  );
-
+  const {photo, profession, fullName, equipment, supervisor, company, dateTag, id, startTime, endTime, breakTime} = employee;
+  
+  const isSavingCardEmployee = useSelector((state: RootState) => state.employees.isSavingCardEmployee.includes(id));
   const [hideBoxTimeSetters, setРideBoxTimeSetters] = useState<boolean>(false);
 
-  const [companyValue, setCompanyValue] = useState<string | null>(
-    company ?? '',
-  );
-  
+  const [startDate, setStartDate] = useState<Date>(() => {
+    if(typeof startTime === 'string') return new Date(+startTime)
+      return setHours(setMinutes(new Date(), 30), 8)
+  });
+
+  const [endDate, setEndDate] = useState<Date>(() => {
+    if(typeof endTime === 'string') return new Date(+endTime)
+      return setHours(setMinutes(new Date(), 15), 17)
+  });
+
+  const [breakDate, setBreakDate] = useState<Date>(() => {
+    if(typeof breakTime === 'string') return new Date(+breakTime)
+      return setHours(setMinutes(new Date(), 0), 4)
+  });                    
+
+  const [companyValue, setCompanyValue] = useState<string | null>(company ?? '');
   const [inputCompanyValue, setInputCompanyValue] = useState(company ?? '');
 
-  const [equipmentValue, setEquipmentValue] = useState<string | null>(
-    equipment ?? '',
-  );
-  const [inputEquipmentValue, setInputEquipmentValue] = useState(
-    equipment ?? '',
-  );
+  const [equipmentValue, setEquipmentValue] = useState<string | null>(equipment ?? '');
+  const [inputEquipmentValue, setInputEquipmentValue] = useState(equipment ?? '');
 
-  const [supervisorValue, setSupervisorValue] = useState<string | null>(
-    supervisor ?? '',
-  );
-  const [inputSupervisorValue, setInputSupervisorValue] = useState(
-    supervisor ?? '',
-  );
+  const [supervisorValue, setSupervisorValue] = useState<string | null>(supervisor ?? '');
+  const [inputSupervisorValue, setInputSupervisorValue] = useState(supervisor ?? '');
 
-  function handleFormControlLabel(
-    event: React.SyntheticEvent,
-    checked: boolean,
-  ) {
+  function handleFormControlLabel(event: React.SyntheticEvent, checked: boolean) {
     setРideBoxTimeSetters(checked);
   }
 
   const handleSaveCardEmployee = () => {
+  
     const getDateToday = (date: Date) => {
       return `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
     };
@@ -86,9 +84,9 @@ const CardEmployee: FC<IEmployee> = ({
       id,
       fullName,
       profession,
-      // startDate: startDate && String(+startDate),
-      // endDate: endDate && String(+endDate),
-      // breakDate: breakDate && String(+breakDate),
+      startDate: startDate && String(+startDate),
+      endDate: endDate && String(+endDate),
+      breakDate: breakDate && String(+breakDate),
       companyValue,
       equipmentValue,
       supervisorValue,
@@ -102,6 +100,9 @@ const CardEmployee: FC<IEmployee> = ({
       <div className={style.imageBox}>
         <img src={photo} alt={fullName} />
         <div className={style.profession}>{profession}</div>
+        <div className={style.square__padding}>
+          <UiSquare status={dateTag ? 'green' : 'red'} />
+        </div>
       </div>
       <div className={style.mainBoxTime}>
         <h2 className={style.h2}>{fullName}</h2>
@@ -119,31 +120,28 @@ const CardEmployee: FC<IEmployee> = ({
           {hideBoxTimeSetters ? null : (
             <div className={style.boxTimeSetters}>
               <UiInputTime 
+                  selected={startDate}
+                  onChange={(date: any) => setStartDate(date)}
                   title={'Начало'} 
-                  dataTime={startTime}
                   dateFormat="HH:mm"
-                  hours={8}
-                  minutes={30}
                   interval={15}
                   timeCaption={false}
                   locale="ru"
               />
               <UiInputTime 
+                  selected={endDate}
+                  onChange={(date: any) => setEndDate(date)}
                   title={'Конец'} 
-                  dataTime={endTime}
                   dateFormat="HH:mm"
-                  hours={17}
-                  minutes={15}
                   interval={15}
                   timeCaption={false}
                   locale="ru"
               />
               <UiInputTime 
+                  selected={breakDate}
+                  onChange={(date: any) => setBreakDate(date)}
                   title={'Перерыв'} 
-                  dataTime={breakTime}
                   dateFormat="HH:mm"
-                  hours={0}
-                  minutes={45}
                   interval={15}
                   minTime={[0, 0]}
                   maxTime={[4, 0]}
@@ -210,13 +208,11 @@ const CardEmployee: FC<IEmployee> = ({
           />
         </div>
       </div>
-      <SaveEmloyeeButton
-        callBack={handleSaveCardEmployee}
-        isDisabled={isSavingCardEmployee}
-      >
-        {dateTag ? 'Обновить' : 'Сохранить'}
-      </SaveEmloyeeButton>
-      {isSavingCardEmployee && <div>Загрузка</div>}
+      <div>
+        <SaveEmloyeeButton callBack={handleSaveCardEmployee} isDisabled={isSavingCardEmployee}>
+          {isSavingCardEmployee ? '...загрузка' : dateTag ? 'Обновить' : 'Сохранить'}
+        </SaveEmloyeeButton>
+      </div>
     </section>
   );
 };

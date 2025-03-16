@@ -1,31 +1,9 @@
 .employees__box {
-  /* display: flex; */
-  /* flex-wrap: wrap; */
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* grid-template-columns: repeat(2, 1fr); */
   gap: 15px;
   margin-top: 10px;
 }
 
-/* .employee__box {
-  border: 1px solid #999;
-  padding: 10px;
-  display: flex;
-  gap: 20px;
-}
-
-.imageBox img {
-  max-width: 150px;
-  width: 100%;
-  height: auto;
-}
-
-.h2 {
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.profession {
-  margin-top: 10px;
-  margin-left: 10px;
-} */

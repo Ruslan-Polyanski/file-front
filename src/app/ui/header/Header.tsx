@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { createLogOut } from '../../../pages/auth/authPage.slice';
+import { logOut } from '../../../pages/auth/authPage.slice';
 import { AppDispatch } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { HeaderLayout } from './headerLyout/HeaderLayout';
@@ -11,7 +11,7 @@ const Header: FC = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const handleClickLogOutButton = () => {
-    dispatch(createLogOut());
+    dispatch(logOut());
   };
 
   return (
