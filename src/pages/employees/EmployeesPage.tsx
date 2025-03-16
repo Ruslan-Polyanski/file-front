@@ -4,7 +4,7 @@ import { EmployeesPageLayout } from './EmployeesPageLayout';
 import { useEmployeesToday } from './use-employees-today';
 
 const EmployeesPage: FC = () => {
-  const {users, companies, equipments, supervisors, isLoaderPage} = useEmployeesToday()
+  const {users, companies, equipments, supervisors, isLoaderPage} = useEmployeesToday();
 
   return (
       <EmployeesPageLayout 
@@ -13,20 +13,10 @@ const EmployeesPage: FC = () => {
           users={users.map((employee) => (
               <CardEmployee
                 key={employee.id}
-                id={employee.id}
-                profession={employee.profession}
-                photo={employee.photo}
-                fullName={employee.fullName}
+                employee={employee}
                 companies={companies}
                 equipments={equipments}
                 supervisors={supervisors}
-                equipment={employee.equipment}
-                supervisor={employee.supervisor}
-                company={employee.company}
-                dateTag={employee.dateTag}
-                startTime={employee.startTime}
-                endTime={employee.endTime}
-                breakTime={employee.breakTime}
               />
         ))}/>
     )
