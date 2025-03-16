@@ -1,0 +1,12 @@
+.square {
+    width: 10px;
+    height: 10px;
+}
+
+.green {
+    background: rgb(51, 155, 48);
+}
+
+.red {
+    background: rgb(210, 90, 90);
+}
