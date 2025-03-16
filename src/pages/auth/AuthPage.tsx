@@ -6,7 +6,7 @@ import { Typography } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../app/store/store';
-import { createLogin } from './authPage.slice';
+import { logIn } from './authPage.slice';
 import { useLocation, useNavigate } from 'react-router';
 import { ErrorMessage } from './errorMessage/ErrorMessage';
 
@@ -54,7 +54,7 @@ const AuthPage: FC = () => {
       password,
     };
 
-    dispatch(createLogin(user));
+    dispatch(logIn(user));
   };
 
   return (
