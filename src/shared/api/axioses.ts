@@ -1,4 +1,3 @@
-import { access_token, LocalStorage } from "../storage/localStorage";
 
 // const BASE_URL = 'http://89.111.153.176';
 const BASE_URL = 'http://localhost:3001';
@@ -13,57 +12,44 @@ const METHOD = {
 
 class API {
     private readonly baseURL: string;
-    private readonly accessToken: LocalStorage;
-
-    constructor(baseURL: string, access_token: LocalStorage) {
+    constructor(baseURL: string) {
         this.baseURL = baseURL;
-        this.accessToken = access_token;
     }
 
-    private async fetcher<T>(path: string, method: string, body?: T): Promise<any> {
-        const accessToken = this.accessToken.get();
+    private async fetcher<T, U extends HeadersInit, K>(path: T, method: string, headers: U, body?: K): Promise<any> {
+        const response = await fetch(this.baseURL + path, {
+            method,
+            headers,
+            ...(body && {body: JSON.stringify(body)})
+            });
+            
+            if (!response.ok) {
+                const error: { error: string, message: string, statusCode: number} = await response.json();
+                if(error.error && error.message && error.statusCode) {
+                    throw new Error(`Error ${error.statusCode}: ${error.error} - ${error.message}`)
+                }
 
-        if(accessToken) {
-            const response = await fetch(this.baseURL + path, {
-                method,
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${accessToken}`,
-                },
-                ...(body && {body: JSON.stringify(body)})
-              });
-    
-              if (!response.ok) {
-                throw new Error(
-                  `Status text: ${response.statusText}, 
-                  status: ${response.status}, 
-                  response url: ${response.url}`,
-                );
-              }
-    
-            return await response.json();
-        }
+                throw new Error(`Error ${response.status}: ${response.statusText}`)
+            }
 
-        return Promise.reject('Token is not available')
-
+        return await response.json();
     }
 
-    public async get(path: string) {
-        return await this.fetcher(path, METHOD.GET)
+    public get<T extends string, U extends Record<string, string>>(path: T, headers: U) {
+        return this.fetcher(path, METHOD.GET, headers)
     }
 
-    public async post<T>(path: string, body: T) {
-        return await this.fetcher(path, METHOD.POST, body)
+    public post<T extends string, U extends Record<string, string>, K extends Record<string, unknown>>(path: T, headers: U, body: K) {
+        return this.fetcher(path, METHOD.POST, headers, body)
     }
 
-    public async put<T>(path: string, body: T) {
-        return await this.fetcher(path, METHOD.PUT, body)
+    public put<T extends string, U extends Record<string, string>, K extends Record<string, unknown>>(path: T, headers: U, body: K) {
+        return this.fetcher(path, METHOD.PUT, headers, body)
     }
 
-    public async patch<T>(path: string, body: T) {
-        return await this.fetcher(path, METHOD.PATCH, body)
+    public patch<T extends string, U extends Record<string, string>, K extends Record<string, unknown>>(path: T, headers: U, body: K) {
+        return this.fetcher(path, METHOD.PATCH, headers, body)
     }
-    
 }
 
-export const axioses = new API(BASE_URL, access_token);
+export const axioses = new API(BASE_URL);
