@@ -1,59 +1,65 @@
 import { axioses } from "./axioses";
 import { access_token } from "../storage/localStorage";
 
+const errorEmptyToken = {
+  status: 401,
+  reason: 'Unauthorized',
+  message: 'token not found',
+}
+
 const API = {
-  getCompanies() {
+  getCompanies<S extends AbortSignal>(signal?: S) {
     const accessToken = access_token.get();
-    if(!accessToken) throw new Error('Error 401: Unauthorized - token not found')
+    if(!accessToken) throw errorEmptyToken
     return axioses.get('/api/companies', {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`
-    })
+    }, signal)
   },
-  getEquipments() {
+  getEquipments<S extends AbortSignal>(signal?: S) {
     const accessToken = access_token.get();
-    if(!accessToken) throw new Error('Error 401: Unauthorized - token not found')
+    if(!accessToken) throw errorEmptyToken
     return axioses.get('/api/equipments', {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`
-    })
+    }, signal)
   },
-  getSupervisors() {
+  getSupervisors<S extends AbortSignal>(signal?: S) {
     const accessToken = access_token.get();
-    if(!accessToken) throw new Error('Error 401: Unauthorized - token not found')
+    if(!accessToken) throw errorEmptyToken
     return axioses.get('/api/levels/supervisors', {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`
-    })
+    }, signal)
   },
-  getTodayEmployees() {
+  getTodayEmployees<S extends AbortSignal>(signal?: S) {
     const accessToken = access_token.get();
-    if(!accessToken) throw new Error('Error 401: Unauthorized - token not found')
+    if(!accessToken) throw errorEmptyToken
     return axioses.get('/api/date/today', {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`
-    })
+    }, signal)
   },
-  checkValidationToken() {
+  checkValidationToken<S extends AbortSignal>(signal?: S) {
     const accessToken = access_token.get();
-    if(!accessToken) throw new Error('Error 401: Unauthorized - token not found')
+    if(!accessToken) throw errorEmptyToken
     return axioses.get('/api/auth/profile', {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`
-    })
+    }, signal)
   },
-  updateTodayEmployees<T extends Record<string, unknown>>(body: T) {
+  updateTodayEmployees<T extends Record<string, unknown>, S extends AbortSignal>(body: T, signal?: S) {
     const accessToken = access_token.get();
-    if(!accessToken) throw new Error('Error 401: Unauthorized - token not found')
+    if(!accessToken) throw errorEmptyToken
     return axioses.patch('/api/date/today', {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`
-    }, body)
+    }, body, signal)
   },
-  logIn<T extends Record<'email' | 'password', string>>(body: T) {
+  logIn<T extends Record<'email' | 'password', string>, S extends AbortSignal>(body: T, signal?: S) {
     return axioses.post('/api/auth/login', {
       'Content-Type': 'application/json',
-    }, body)
+    }, body, signal)
   }
 };
 

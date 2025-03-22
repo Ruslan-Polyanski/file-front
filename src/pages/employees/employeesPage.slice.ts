@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { API } from '../../shared/api/api';
 import { RootState } from '../../app/store/store';
+import { logOut } from '../auth/authPage.slice';
 
 interface ICompany {
   id: number;
@@ -98,11 +99,11 @@ const {
 
 export const saveEmployeeData = createAsyncThunk(
   '@@employees/saveEmployeeData',
-  async (employee: IUsersRequest, { dispatch , getState}) => {
+  async (employee: IUsersRequest, { dispatch , getState, signal }) => {
       try {
         dispatch(setIsSavingCardEmployee(employee.id));
 
-        const response = await API.updateTodayEmployees(employee)
+        const response = await API.updateTodayEmployees(employee, signal)
 
         const {employees: { users }} = getState() as RootState; 
         
@@ -115,8 +116,8 @@ export const saveEmployeeData = createAsyncThunk(
 
         dispatch(setUsers(updateUsers))
         
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+          if(error.status === 401) dispatch(logOut())
       } finally {
         dispatch(setIsSavingCardEmployee(employee.id));
       }
@@ -126,22 +127,25 @@ export const saveEmployeeData = createAsyncThunk(
 export const getEmployeesData = createAsyncThunk(
   '@@employees/getEmployeesData',
   async (_, { dispatch }) => {
-    dispatch(setIsLoaderPage(true));
-
+    try {
+      dispatch(setIsLoaderPage(true));
       const data = await Promise.all([
         API.getCompanies(),
         API.getEquipments(),
         API.getSupervisors(),
         API.getTodayEmployees(),
       ]);
-
+  
       data.forEach((item) => {
         if (item.companies) dispatch(setCompanies(item.companies));
         if (item.equipments) dispatch(setEquipments(item.equipments));
         if (item.supervisors) dispatch(setSupervisors(item.supervisors));
         if (item.users) dispatch(setUsers(item.users));
       });
-
+    } catch(error: any) {
+        if(error.status === 401) dispatch(logOut())
+    } finally {
       dispatch(setIsLoaderPage(false));
+    }
   },
 );

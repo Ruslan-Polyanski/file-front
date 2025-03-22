@@ -11,6 +11,7 @@ import { UiInputTime } from '../ui/ui-input-time';
 import { setHours, setMinutes } from 'date-fns';
 import { Autocomplete, TextField } from '@mui/material';
 import { UiSquare } from '../../../shared/ui/square/UiSquare';
+import { getDateDDMMYYYY } from '../../../shared/utils/getDate-DDMMYYYY';
 
 interface IEmployee {
   id: number;
@@ -74,13 +75,9 @@ const CardEmployee: FC<ICardEmployee> = ({
   }
 
   const handleSaveCardEmployee = () => {
-  
-    const getDateToday = (date: Date) => {
-      return `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
-    };
 
     const dataEmployee = {
-      dataTag: getDateToday(new Date()),
+      dataTag: getDateDDMMYYYY(new Date()),
       id,
       fullName,
       profession,
@@ -92,7 +89,7 @@ const CardEmployee: FC<ICardEmployee> = ({
       supervisorValue,
     };
 
-    dispatch(saveEmployeeData(dataEmployee));
+    dispatch(saveEmployeeData(dataEmployee))
   };
 
   return (
