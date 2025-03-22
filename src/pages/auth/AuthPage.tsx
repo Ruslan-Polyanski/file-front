@@ -2,18 +2,15 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import style from './AuthPage.module.css';
 import { Typography } from '@mui/material';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../app/store/store';
-import { logIn } from './authPage.slice';
+import { logIn, setEmail, setErrorAuth, setPassword } from './authPage.slice';
 import { useLocation, useNavigate } from 'react-router';
 import { ErrorMessage } from './errorMessage/ErrorMessage';
-
-interface IUser {
-  email: string;
-  password: string;
-}
+import { validateForm } from '../../shared/utils/validateForm';
 
 const AuthPage: FC = () => {
   const navigate = useNavigate();
@@ -21,6 +18,8 @@ const AuthPage: FC = () => {
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const errorAuth = useSelector((state: RootState) => state.auth.errorAuth);
+  const email = useSelector((state: RootState) => state.auth.email);
+  const password = useSelector((state: RootState) => state.auth.password);
 
   useEffect(() => {
     if (location.pathname !== '/login') {
@@ -32,30 +31,41 @@ const AuthPage: FC = () => {
     }
   }, [isAuth]);
 
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const dispatch: AppDispatch = useDispatch();
 
   const handleChangeEmail: React.ChangeEventHandler<HTMLInputElement> = (
     event,
   ) => {
-    setEmail(event.target.value);
+    dispatch(setEmail(event.target.value))
   };
 
   const handleChangePassword: React.ChangeEventHandler<HTMLInputElement> = (
     event,
   ) => {
-    setPassword(event.target.value);
+    dispatch(setPassword(event.target.value))
   };
 
   const handleClickButtonSendForm = () => {
-    const user: IUser = {
+    const dataForm = {
       email,
       password,
     };
 
-    dispatch(logIn(user));
+    const { result, message } = validateForm(dataForm);
+
+    if(result) {
+      dispatch(logIn(dataForm))
+    } else {
+      dispatch(setErrorAuth(message))
+    }
+    
   };
+
+  const handleClickButtonClearForm = () => {
+    dispatch(setEmail(''));
+    dispatch(setPassword(''));
+    dispatch(setErrorAuth(''));
+  }
 
   return (
     <>
@@ -97,9 +107,14 @@ const AuthPage: FC = () => {
             alignItems: 'center',
           }}
         >
-          <Button onClick={handleClickButtonSendForm} variant="contained">
-            Отправить
-          </Button>
+          <div className={style.wrapper}>
+            <Button onClick={handleClickButtonSendForm} variant="contained" sx={{width: 140}}>
+              Отправить
+            </Button>
+            <Button onClick={handleClickButtonClearForm} variant="contained" sx={{width: 140}}>
+              Очистить
+            </Button>
+          </div>
         </Stack>
         {errorAuth && <ErrorMessage text={errorAuth} />}
       </Box>

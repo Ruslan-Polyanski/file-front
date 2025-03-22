@@ -3,9 +3,12 @@ import { access_token } from '../../shared/storage/localStorage';
 import { API } from '../../shared/api/api';
 
 interface IAuthState {
+  id: number | null;
   isAuth: boolean;
   isLoader: boolean;
-  errorAuth: string | null;
+  errorAuth: string;
+  email: string;
+  password: string;
 }
 
 interface IUser {
@@ -20,15 +23,21 @@ interface IUserResponse {
 }
 
 const initialAuthState: IAuthState = {
+  id: null,
   isAuth: false,
   isLoader: true,
-  errorAuth: null,
+  errorAuth: '',
+  email: '',
+  password: '',
 };
 
 export const authSlice = createSlice({
   name: '@@Auth',
   initialState: initialAuthState,
   reducers: {
+    setId: (state, action) => {
+      return { ...state, id: action.payload };
+    },
     setIsAuth: (state, action) => {
       return { ...state, isAuth: action.payload };
     },
@@ -38,25 +47,32 @@ export const authSlice = createSlice({
     setErrorAuth: (state, action) => {
       return { ...state, errorAuth: action.payload };
     },
+    setEmail: (state, action) => {
+      return { ...state, email: action.payload }
+    },
+    setPassword: (state, action) => {
+      return { ...state, password: action.payload }
+    }
   },
 });
 
-export const { setIsAuth, setIsLoader, setErrorAuth } = authSlice.actions;
+export const { setIsAuth, setIsLoader, setErrorAuth, setEmail, setPassword, setId } = authSlice.actions;
 
 export const logIn = createAsyncThunk(
-  '@@Auth/createLogin',
+  '@@Auth/logIn',
   async (user: IUser, { dispatch }) => {
-    dispatch(setIsLoader(true));
     try {
+      dispatch(setIsLoader(true));
       const data: IUserResponse = await API.logIn(user)
-      const { token } = data;
+      const { token, id } = data;
       access_token.set(token)
+      dispatch(setId(id))
       dispatch(setIsAuth(true));
-      dispatch(setErrorAuth(null));
-    } catch (error) {
-      if (error instanceof Error) {
-        dispatch(setErrorAuth(error.message));
-      }
+      dispatch(setErrorAuth(''));
+      dispatch(setPassword(''));
+    } catch (error: any) {
+      const messageError = error.status + ' ' + error.reason + ' ' + error.message;
+        dispatch(setErrorAuth(messageError));
     } finally {
       dispatch(setIsLoader(false));
     }
@@ -64,26 +80,27 @@ export const logIn = createAsyncThunk(
 );
 
 export const checkAuth = createAsyncThunk(
-  '@@Auth/createCheckAuth',
+  '@@Auth/checkAuth',
   async (_, { dispatch }) => {
       try {
-          await API.checkValidationToken();
-          dispatch(setIsAuth(true));
-          dispatch(setErrorAuth(null));
-        } catch (error) {
-          if (error instanceof Error) {
-            dispatch(setErrorAuth(error.message));
-          }
-        } finally {
-          dispatch(setIsLoader(false));
-        }
+        dispatch(setIsLoader(true));
+        await API.checkValidationToken();
+        dispatch(setIsAuth(true));
+      } catch(error) {
+        dispatch(setErrorAuth(''));
+      } finally {
+        dispatch(setIsLoader(false));
+      }
     }
 );
 
 export const logOut = createAsyncThunk(
-  '@@Auth/createLogOut',
+  '@@Auth/logOut',
   async (_, { dispatch }) => {
     access_token.delete()
+    dispatch(setId(null))
     dispatch(setIsAuth(false));
+    dispatch(setEmail(''));
+    dispatch(setPassword(''))
   },
 );
