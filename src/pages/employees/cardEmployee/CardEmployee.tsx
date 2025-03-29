@@ -6,32 +6,18 @@ import Checkbox from '@mui/material/Checkbox';
 import { SaveEmloyeeButton } from '../../../shared/ui/buttons/saveEmployee/SaveEmloyeeButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../app/store/store';
-import { saveEmployeeData } from '../employeesPage.slice';
+import { TEmployee, saveEmployeeData } from '../employeesPage.slice';
 import { UiInputTime } from '../ui/ui-input-time';
 import { setHours, setMinutes } from 'date-fns';
 import { Autocomplete, TextField } from '@mui/material';
 import { UiSquare } from '../../../shared/ui/square/UiSquare';
 import { getDateDDMMYYYY } from '../../../shared/utils/getDate-DDMMYYYY';
 
-interface IEmployee {
-  id: number;
-  fullName: string;
-  profession: string;
-  photo: string;
-  equipment: string | null;
-  supervisor: string | null;
-  company: string | null;
-  dateTag: string | null;
-  startTime: null | string;
-  endTime: null | string;
-  breakTime: null | string;
-}
-
 export interface ICardEmployee {
   companies: { id: number; title: string }[];
   equipments: { id: number; title: string }[];
   supervisors: { id: number; fullName: string }[];
-  employee: IEmployee;
+  employee: TEmployee;
 }
 
 const CardEmployee: FC<ICardEmployee> = ({
@@ -58,17 +44,12 @@ const CardEmployee: FC<ICardEmployee> = ({
 
   const [breakDate, setBreakDate] = useState<Date>(() => {
     if(typeof breakTime === 'string') return new Date(+breakTime)
-      return setHours(setMinutes(new Date(), 0), 4)
+      return setHours(setMinutes(new Date(), 45), 0)
   });                    
 
   const [companyValue, setCompanyValue] = useState<string | null>(company ?? '');
-  const [inputCompanyValue, setInputCompanyValue] = useState(company ?? '');
-
   const [equipmentValue, setEquipmentValue] = useState<string | null>(equipment ?? '');
-  const [inputEquipmentValue, setInputEquipmentValue] = useState(equipment ?? '');
-
   const [supervisorValue, setSupervisorValue] = useState<string | null>(supervisor ?? '');
-  const [inputSupervisorValue, setInputSupervisorValue] = useState(supervisor ?? '');
 
   function handleFormControlLabel(event: React.SyntheticEvent, checked: boolean) {
     setРideBoxTimeSetters(checked);
@@ -156,10 +137,6 @@ const CardEmployee: FC<ICardEmployee> = ({
             onChange={(event, newValue: string | null) => {
               setCompanyValue(newValue);
             }}
-            inputValue={inputCompanyValue}
-            onInputChange={(event, newInputValue) => {
-              setInputCompanyValue(newInputValue);
-            }}
             disablePortal
             options={companies.map((item) => item.title)}
             sx={{ width: 250 }}
@@ -174,10 +151,6 @@ const CardEmployee: FC<ICardEmployee> = ({
             onChange={(event, newValue: string | null) => {
               setEquipmentValue(newValue);
             }}
-            inputValue={inputEquipmentValue}
-            onInputChange={(event, newInputValue) => {
-              setInputEquipmentValue(newInputValue);
-            }}
             disablePortal
             options={equipments.map((item) => item.title)}
             sx={{ width: 250 }}
@@ -191,10 +164,6 @@ const CardEmployee: FC<ICardEmployee> = ({
             value={supervisorValue}
             onChange={(event, newValue: string | null) => {
               setSupervisorValue(newValue);
-            }}
-            inputValue={inputSupervisorValue}
-            onInputChange={(event, newInputValue) => {
-              setInputSupervisorValue(newInputValue);
             }}
             disablePortal
             options={supervisors.map((item) => item.fullName)}

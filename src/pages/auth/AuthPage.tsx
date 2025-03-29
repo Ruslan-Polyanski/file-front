@@ -10,16 +10,14 @@ import { AppDispatch, RootState } from '../../app/store/store';
 import { logIn, setEmail, setErrorAuth, setPassword } from './authPage.slice';
 import { useLocation, useNavigate } from 'react-router';
 import { ErrorMessage } from './errorMessage/ErrorMessage';
-import { validateForm } from '../../shared/utils/validateForm';
+import { validateForm, validateEmail, validatePassword } from '../../shared/utils/validateForm';
+import { useDataFormAuth } from './use-Data-Form-Auth';
 
 const AuthPage: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
-  const errorAuth = useSelector((state: RootState) => state.auth.errorAuth);
-  const email = useSelector((state: RootState) => state.auth.email);
-  const password = useSelector((state: RootState) => state.auth.password);
+  const {isAuth, errorAuth, email, password} = useDataFormAuth()
 
   useEffect(() => {
     if (location.pathname !== '/login') {
@@ -51,7 +49,7 @@ const AuthPage: FC = () => {
       password,
     };
 
-    const { result, message } = validateForm(dataForm);
+    const { result, message } = validateForm(dataForm, [validateEmail, validatePassword]);
 
     if(result) {
       dispatch(logIn(dataForm))

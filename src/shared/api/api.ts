@@ -40,6 +40,14 @@ const API = {
       Authorization: `Bearer ${accessToken}`
     }, signal)
   },
+  getProfessions<S extends AbortSignal>(signal?: S) {
+    const accessToken = access_token.get();
+    if(!accessToken) throw errorEmptyToken
+    return axioses.get('/api/professions', {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`
+    }, signal)
+  },
   checkValidationToken<S extends AbortSignal>(signal?: S) {
     const accessToken = access_token.get();
     if(!accessToken) throw errorEmptyToken

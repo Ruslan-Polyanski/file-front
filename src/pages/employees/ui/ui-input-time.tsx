@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import DatePicker from 'react-datepicker';
 import { setHours } from 'date-fns/setHours';
 import { setMinutes } from 'date-fns/setMinutes';
@@ -6,31 +6,25 @@ import style from './ui-input-time.module.css';
 
 interface IProps {
     title: string; 
-    dataTime: string | null;
-    hours: number; 
-    minutes: number; 
     minTime?: [number, number];
     maxTime?: [number, number];
     timeCaption: boolean;
     interval: number;
     locale: "ru" | "es";
     dateFormat: "HH:mm";
+    selected: any;
+    onChange: any;
 }
 
-const UiInputTime: FC<IProps> = ({title, dataTime, hours, minutes, minTime, maxTime, timeCaption, interval, locale, dateFormat}) => {
-    const [time, setTime] = useState<Date | null>(
-    typeof dataTime === 'string'
-        ? new Date(+dataTime)
-        : setHours(setMinutes(new Date(), minutes), hours),
-    );
+const UiInputTime: FC<IProps> = ({title, minTime, maxTime, timeCaption, interval, locale, dateFormat, selected, onChange}) => {
 
     return (
         <div className={style.timeSetter}>
             <span>{title}</span>
             <div>
                 <DatePicker
-                    selected={time}
-                    onChange={(time) => setTime(time)}
+                    selected={selected}
+                    onChange={onChange}
                     showTimeSelect
                     showTimeSelectOnly
                     timeIntervals={interval}
