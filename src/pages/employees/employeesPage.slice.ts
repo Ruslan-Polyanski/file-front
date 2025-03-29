@@ -18,7 +18,12 @@ interface ISupervisor {
   fullName: string;
 }
 
-interface IUsers {
+interface IProfession {
+  id: number;
+  name: string;
+}
+
+export type TEmployee = {
   id: number;
   dateTag: null | string;
   fullName: string;
@@ -37,21 +42,25 @@ interface IUsersRequest {
 }
 
 interface IEmployeesState {
-  users: IUsers[];
+  employees: TEmployee[];
   companies: ICompany[];
   equipments: IEquipment[];
   supervisors: ISupervisor[];
+  professions: IProfession[];
   isLoaderPage: boolean;
   isSavingCardEmployee: number[];
+  filters: Record<string, unknown>
 }
 
 const initialEmployeesState: IEmployeesState = {
-  users: [],
+  employees: [],
   companies: [],
   equipments: [],
   supervisors: [],
+  professions: [],
   isLoaderPage: false,
   isSavingCardEmployee: [],
+  filters: {}
 };
 
 export const employeesSlice = createSlice({
@@ -70,8 +79,20 @@ export const employeesSlice = createSlice({
     setSupervisors: (state, action) => {
       return { ...state, supervisors: action.payload };
     },
-    setUsers: (state, action) => {
-      return { ...state, users: action.payload };
+    setEmployees: (state, action) => {
+      return { ...state, employees: action.payload };
+    },
+    setFilters: (state, action) => {
+      const newFilters = {...state.filters, ...action.payload}
+
+      for(const key in newFilters) {
+        newFilters[key] === null && delete newFilters[key]
+      }
+
+      return {...state, filters: {...newFilters}}
+    },
+    setProfessions: (state, action) => {
+      return {...state, professions: action.payload}
     },
     setIsSavingCardEmployee: (state, action) => {
       const isExist = state.isSavingCardEmployee.includes(action.payload);
@@ -88,13 +109,15 @@ export const employeesSlice = createSlice({
   },
 });
 
-const {
+export const {
   setIsLoaderPage,
   setCompanies,
   setEquipments,
   setSupervisors,
-  setUsers,
+  setEmployees,
   setIsSavingCardEmployee,
+  setProfessions,
+  setFilters,
 } = employeesSlice.actions;
 
 export const saveEmployeeData = createAsyncThunk(
@@ -105,16 +128,16 @@ export const saveEmployeeData = createAsyncThunk(
 
         const response = await API.updateTodayEmployees(employee, signal)
 
-        const {employees: { users }} = getState() as RootState; 
+        const {employees: { employees }} = getState() as RootState; 
         
-        const updateUsers = users.map(user => {
-          if(user.id !== response.id) {
-            return user;
+        const updateUsers = employees.map(employee => {
+          if(employee.id !== response.id) {
+            return employee;
           } 
-          return{...user, ...response}
+          return{...employee, ...response}
         })
 
-        dispatch(setUsers(updateUsers))
+        dispatch(setEmployees(updateUsers))
         
       } catch (error: any) {
           if(error.status === 401) dispatch(logOut())
@@ -134,13 +157,15 @@ export const getEmployeesData = createAsyncThunk(
         API.getEquipments(),
         API.getSupervisors(),
         API.getTodayEmployees(),
+        API.getProfessions(),
       ]);
   
       data.forEach((item) => {
         if (item.companies) dispatch(setCompanies(item.companies));
         if (item.equipments) dispatch(setEquipments(item.equipments));
         if (item.supervisors) dispatch(setSupervisors(item.supervisors));
-        if (item.users) dispatch(setUsers(item.users));
+        if (item.users) dispatch(setEmployees(item.users));
+        if (item.professions) dispatch(setProfessions(item.professions));
       });
     } catch(error: any) {
         if(error.status === 401) dispatch(logOut())

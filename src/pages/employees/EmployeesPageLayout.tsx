@@ -1,13 +1,21 @@
 import { FC, ReactNode } from "react"
 import style from './EmployeesPage.module.css';
 
-const EmployeesPageLayout: FC<{title: string, isLoaderPage: string | boolean, users:  ReactNode }> = ({title, isLoaderPage, users}) => {
+interface IEmployeesProps {
+  title: string; 
+  isLoaderPage: string | boolean;
+  employees:  ReactNode;
+  filterEmployees: ReactNode;
+}
+
+const EmployeesPageLayout: FC<IEmployeesProps> = ({title, isLoaderPage, employees, filterEmployees}) => {
     return (
       <>
         <h1>{title}</h1>
         {isLoaderPage}
+        <div>{filterEmployees}</div>
         <article className={style.employees__box}>
-          {users}
+          {employees}
         </article>
       </>
     );
