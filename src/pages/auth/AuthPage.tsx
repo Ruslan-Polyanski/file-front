@@ -16,10 +16,7 @@ const AuthPage: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
-  const errorAuth = useSelector((state: RootState) => state.auth.errorAuth);
-  const email = useSelector((state: RootState) => state.auth.email);
-  const password = useSelector((state: RootState) => state.auth.password);
+  const {isAuth, errorAuth, email, password} = useDataFormAuth()
 
   useEffect(() => {
     if (location.pathname !== '/login') {
