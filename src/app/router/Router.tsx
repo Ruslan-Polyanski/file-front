@@ -1,7 +1,7 @@
 import { LayoutBase } from '../layout/layoutBase/LayoutBase';
 import { ErrorPage } from '../../pages/error/ErrorPage';
 import { HomePage } from '../../pages/home/HomePage';
-import { EmployeesPage } from '../../pages/employees/EmployeesPage';
+import { EmployeesPage } from '../../pages/employees/page/employees-page';
 import { CarPage } from '../../pages/car/CarPage';
 import { AuthPage } from '../../pages/auth/AuthPage';
 import { Outlet, Route, Routes } from 'react-router';

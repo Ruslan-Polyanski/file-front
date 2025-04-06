@@ -1,7 +1,7 @@
-interface IData {
-    email?: string;
-    password?: string;
-}
+// interface IData {
+//     email?: string;
+//     password?: string;
+// }
 
 interface IResultValidation {
     result: boolean;
@@ -10,7 +10,7 @@ interface IResultValidation {
 
 type TValidateFunction = (data: any) => ({ result: boolean; message: string; })
 
-type TValidateFC = (data: IData, validateFunctionList: TValidateFunction[]) => IResultValidation;
+type TValidateFC = (data: any, validateFunctionList: TValidateFunction[]) => IResultValidation;
 
 export const validateEmail = (data: {email: string}) => {
     const messageError = 'Email is not valid.'
@@ -36,6 +36,19 @@ export const validatePassword = (data: {password: string}) => {
 
     return result;
   }
+
+export const validateEmptyArea = (data: Record<string, unknown>) => {
+    const messageError = 'You need to add data to all areas.'
+    const messageSuccess = 'Success'
+
+    const resultValidationAreas = Object.values(data).filter(item => {
+        if(!item) return true
+    })
+    
+    const result = !resultValidationAreas.length ? {result: true, message: messageSuccess} : {result: false, message: messageError}
+    
+    return result;
+}
 
 const validateForm: TValidateFC = (data, validateFunctionList) => {
     const messageValidationList: string[] = [];

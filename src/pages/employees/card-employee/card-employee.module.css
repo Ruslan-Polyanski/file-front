@@ -1,7 +1,9 @@
-.employee__box {
+.section {
   border: 1px solid #999;
-  padding: 10px;
-  padding-bottom: 12px;
+  padding: 10px 10px 12px 10px;
+}
+
+.employee__box {
   display: flex;
   gap: 20px;
 }
@@ -40,10 +42,8 @@
 }
 
 .autocomplete-box {
-  /* margin-right: 10px; */
   display: flex;
   flex-direction: column;
-  /* gap: 12px; */
   justify-content: space-between;
 }
 

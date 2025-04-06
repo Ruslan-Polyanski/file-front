@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { access_token } from '../../shared/storage/localStorage';
+import { access_token } from '../../shared/storage/local-storage';
 import { API } from '../../shared/api/api';
 
 interface IAuthState {

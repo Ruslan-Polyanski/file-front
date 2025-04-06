@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '../../app/store/store';
+import { RootState } from '../../../app/store/store';
 
 export const useDataFormAuth = () => {
       const isAuth = useSelector((state: RootState) => state.auth.isAuth);

@@ -1,0 +1,12 @@
+.bg {
+  background-color: rgb(0, 188, 212);
+  color: white;
+  border: none;
+  min-width: 100px;
+  opacity: 0.7;
+}
+
+.bg:hover {
+  opacity: 1;
+  background-color: rgb(0, 188, 212);
+}

@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { HeaderLayout } from './headerLyout/HeaderLayout';
 import { LinkLogo } from './linkLogo/LinkLogo';
 import { Menu } from './menu/Menu';
-import { LogOutButton } from '../../../shared/ui/buttons/logOutButton/LogOutButton';
+import { UiLogOutButton } from '../../../shared/ui/buttons/log-out/ui-log-out-button';
 
 const Header: FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -18,7 +18,7 @@ const Header: FC = () => {
     <HeaderLayout
       menu={<Menu />}
       linkLogo={<LinkLogo />}
-      logOutButton={<LogOutButton callBack={handleClickLogOutButton} />}
+      logOutButton={<UiLogOutButton onClick={handleClickLogOutButton}>Выход</UiLogOutButton>}
     />
   );
 };
