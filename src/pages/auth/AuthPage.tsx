@@ -5,13 +5,13 @@ import Button from '@mui/material/Button';
 import style from './AuthPage.module.css';
 import { Typography } from '@mui/material';
 import { FC, useEffect} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../app/store/store';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../app/store/store';
 import { logIn, setEmail, setErrorAuth, setPassword } from './authPage.slice';
 import { useLocation, useNavigate } from 'react-router';
 import { ErrorMessage } from './errorMessage/ErrorMessage';
-import { validateForm, validateEmail, validatePassword } from '../../shared/utils/validateForm';
-import { useDataFormAuth } from './use-Data-Form-Auth';
+import { validateForm, validateEmail, validatePassword } from '../../shared/utils/validate-form';
+import { useDataFormAuth } from './hooks/use-data-form-auth';
 
 const AuthPage: FC = () => {
   const navigate = useNavigate();

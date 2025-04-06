@@ -1,12 +1,12 @@
 import { Link } from 'react-router';
 import style from './LinkLogo.module.css';
-import { Logo } from '../../../../shared/ui/logo/Logo';
+import { UiLogo } from '../../../../shared/ui/logo/ui-logo';
 
 const LinkLogo = () => {
   return (
     <div className={style.logo}>
       <Link to={'/'}>
-        <Logo />
+        <UiLogo />
       </Link>
     </div>
   );

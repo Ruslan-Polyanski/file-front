@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { FcBarChart } from 'react-icons/fc';
 
-const Logo: FC = () => {
+const UiLogo: FC = () => {
   return (
     <>
       <FcBarChart size={40} />
@@ -9,4 +9,4 @@ const Logo: FC = () => {
   );
 };
 
-export { Logo };
+export { UiLogo };

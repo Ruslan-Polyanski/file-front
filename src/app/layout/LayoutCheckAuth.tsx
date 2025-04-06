@@ -3,7 +3,7 @@ import { AppDispatch, RootState } from '../store/store';
 import { FC, useEffect } from 'react';
 import { checkAuth } from '../../pages/auth/authPage.slice';
 import Box from '@mui/material/Box';
-import { Loader } from '../../shared/ui/loader/Loader';
+import { UiLoader } from '../../shared/ui/loaders/loader/ui-loader';
 import { Outlet } from 'react-router';
 import { AuthPage } from '../../pages/auth/AuthPage';
 
@@ -26,7 +26,7 @@ const LayoutCheckAuth: FC = () => {
           alignItems: 'center',
         }}
       >
-        <Loader />
+        <UiLoader />
       </Box>
     );
   }

@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { API } from '../../shared/api/api';
-import { RootState } from '../../app/store/store';
-import { logOut } from '../auth/authPage.slice';
+import { API } from '../../../shared/api/api';
+import { RootState } from '../../../app/store/store';
+import { logOut } from '../../auth/authPage.slice';
 
 interface ICompany {
   id: number;
   title: string;
 }
 
-interface IEquipment {
+type TEquipment = {
   id: number;
   title: string;
 }
@@ -18,7 +18,7 @@ interface ISupervisor {
   fullName: string;
 }
 
-interface IProfession {
+type TProfession = {
   id: number;
   name: string;
 }
@@ -35,6 +35,7 @@ export type TEmployee = {
   supervisor: null | string;
   profession: string;
   photo: string;
+  place: string;
 }
 
 interface IUsersRequest {
@@ -44,12 +45,13 @@ interface IUsersRequest {
 interface IEmployeesState {
   employees: TEmployee[];
   companies: ICompany[];
-  equipments: IEquipment[];
+  equipments: TEquipment[];
   supervisors: ISupervisor[];
-  professions: IProfession[];
+  professions: TProfession[];
+  places: string[];
   isLoaderPage: boolean;
   isSavingCardEmployee: number[];
-  filters: Record<string, unknown>
+  filters: Partial<TEmployee>;
 }
 
 const initialEmployeesState: IEmployeesState = {
@@ -58,9 +60,10 @@ const initialEmployeesState: IEmployeesState = {
   equipments: [],
   supervisors: [],
   professions: [],
+  places: ['В офисе', 'На выезде'],
   isLoaderPage: false,
   isSavingCardEmployee: [],
-  filters: {}
+  filters: {},
 };
 
 export const employeesSlice = createSlice({
@@ -83,10 +86,12 @@ export const employeesSlice = createSlice({
       return { ...state, employees: action.payload };
     },
     setFilters: (state, action) => {
+      if(!Object.keys(action.payload).length) return {...state, filters: {}}
+
       const newFilters = {...state.filters, ...action.payload}
 
       for(const key in newFilters) {
-        newFilters[key] === null && delete newFilters[key]
+        if(newFilters[key] === null) delete newFilters[key]
       }
 
       return {...state, filters: {...newFilters}}

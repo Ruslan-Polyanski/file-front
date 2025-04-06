@@ -1,5 +1,5 @@
 import { axioses } from "./axioses";
-import { access_token } from "../storage/localStorage";
+import { access_token } from "../storage/local-storage";
 
 const errorEmptyToken = {
   status: 401,
