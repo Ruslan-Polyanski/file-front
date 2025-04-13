@@ -3,17 +3,19 @@ import style from './card-employee.module.css';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { UiSaveEmloyeeButton } from '../../../shared/ui/buttons/save-employee/ui-save-emloyee-button';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../app/store/store';
-import { TEmployee, saveEmployeeData } from '../slice/employees-page.slice';
-import { UiInputTime } from '../../../shared/ui/input-time/ui-input-time';
+import { AppDispatch, RootState } from '../../../../app/store';
+import { TEmployee, saveEmployeeData } from '../../model/employees-page.slice';
+import { UiInputTime } from '../../../../shared/ui/input-time/ui-input-time';
 import { setHours, setMinutes } from 'date-fns';
-import { Autocomplete, TextField } from '@mui/material';
-import { UiSquare } from '../../../shared/ui/square/ui-square';
-import { getDateDDMMYYYY } from '../../../shared/utils/get-date-DDMMYYYY';
-import { validateEmptyArea, validateForm } from '../../../shared/utils/validate-form';
-import { UiError } from '../../../shared/ui/error/ui-error';
+import { UiSquare } from '../../../../shared/ui/square/ui-square';
+import { getDateDDMMYYYY } from '../../../../shared/utils/get-date-DDMMYYYY';
+import { validateEmptyArea, validateForm } from '../../../../shared/utils/validate-form';
+import { UiError } from '../../../../shared/ui/error/ui-error';
+import { useInView } from 'react-intersection-observer';
+import { UiButton } from '../../../../shared/ui/button/ui-button';
 
 export interface ICardEmployee {
   companies: { id: number; title: string }[];
@@ -28,7 +30,6 @@ const CardEmployee: FC<ICardEmployee> = ({
   supervisors,
   employee,
 }) => {
-  
   const dispatch: AppDispatch = useDispatch();
   const {photo, profession, fullName, equipment, supervisor, company, dateTag, id, startTime, endTime, breakTime} = employee;
   
@@ -78,20 +79,26 @@ const CardEmployee: FC<ICardEmployee> = ({
 
     const {result, message} = resultValidation
 
-    if(!result) setError(message)
+    if(!result) {
+      setError(message)
+      return
+    }
 
-    if(result) {
-      dispatch(saveEmployeeData(dataEmployee))
-      setError(null)
-    } 
-
+    dispatch(saveEmployeeData(dataEmployee))
+    setError(null)
   };
 
+  const { ref, inView, entry } = useInView({
+    threshold: 0,
+    triggerOnce: true,
+  });
+
   return (
-    <section className={style.section}>
+    <section ref={ref} className={style.section}>
+      { !inView ? null : 
       <div className={style.employee__box}>
         <div className={style.imageBox}>
-          <img src={photo} alt={fullName} />
+          <img loading="lazy" width="150" height="150" src={photo} alt={fullName} className={style.photo} />
           <div className={style.profession}>{profession}</div>
           <div className={style.square__padding}>
             <UiSquare color={dateTag ? 'green' : 'red'} />
@@ -190,12 +197,12 @@ const CardEmployee: FC<ICardEmployee> = ({
           </div>
         </div>
         <div>
-          <UiSaveEmloyeeButton onClick={handleSaveCardEmployee} isDisabled={isSavingCardEmployee}>
+          <UiButton onClick={handleSaveCardEmployee} disabled={isSavingCardEmployee} color={'blue'}>
             {isSavingCardEmployee ? '...загрузка' : dateTag ? 'Изменить' : 'Сохранить'}
-          </UiSaveEmloyeeButton>
+          </UiButton>
+          {error && <UiError message={error} />}
         </div>
-      </div>
-      {error && <UiError message={error} />}
+      </div>}
     </section>
   );
 };

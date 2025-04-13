@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../store/store';
 import { FC, useEffect } from 'react';
-import { checkAuth } from '../../pages/auth/authPage.slice';
 import Box from '@mui/material/Box';
-import { UiLoader } from '../../shared/ui/loaders/loader/ui-loader';
 import { Outlet } from 'react-router';
-import { AuthPage } from '../../pages/auth/AuthPage';
+import { AppDispatch, RootState } from '../../store';
+import { checkAuth } from '../../../pages/auth/authPage.slice';
+import { UiLoader } from '../../../shared/ui/loaders/loader/ui-loader';
+import { AuthPage } from '../../../pages/auth/AuthPage';
 
 const LayoutCheckAuth: FC = () => {
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);

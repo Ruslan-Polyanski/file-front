@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { logOut } from '../../../pages/auth/authPage.slice';
-import { AppDispatch } from '../../store/store';
+import { AppDispatch } from '../../store';
 import { useDispatch } from 'react-redux';
-import { HeaderLayout } from './headerLyout/HeaderLayout';
-import { LinkLogo } from './linkLogo/LinkLogo';
-import { Menu } from './menu/Menu';
-import { UiLogOutButton } from '../../../shared/ui/buttons/log-out/ui-log-out-button';
+import { HeaderLayout } from './header-layout/header-layout';
+import { LinkLogo } from './link-logo/link-logo';
+import { UiButton } from '../../../shared/ui/button/ui-button';
+import { Menu } from './menu/menu';
 
 const Header: FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -18,7 +18,7 @@ const Header: FC = () => {
     <HeaderLayout
       menu={<Menu />}
       linkLogo={<LinkLogo />}
-      logOutButton={<UiLogOutButton onClick={handleClickLogOutButton}>Выход</UiLogOutButton>}
+      logOutButton={<UiButton onClick={handleClickLogOutButton} color={'red'}>Выход</UiButton>}
     />
   );
 };

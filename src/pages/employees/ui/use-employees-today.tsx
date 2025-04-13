@@ -1,7 +1,7 @@
-import { useDeferredValue, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../app/store/store';
-import { getEmployeesData, setFilters } from '../slice/employees-page.slice';
+import { AppDispatch, RootState } from '../../../app/store';
+import { getEmployeesData, setFilters } from '../model/employees-page.slice';
 import { filterData } from '../../../shared/utils/filter-data';
 
 export const useEmployeesToday = () => {
@@ -15,12 +15,6 @@ export const useEmployeesToday = () => {
     const professions = useSelector((state: RootState) => state.employees.professions);
     const places = useSelector((state: RootState) => state.employees.places);
     const filteredEmployees = useSelector((state: RootState) => filterData(state.employees.employees, state.employees.filters));
-
-    const deferredFilteredEmployees = useDeferredValue(filteredEmployees);
-
-    const isLoaderFilters = filteredEmployees !== deferredFilteredEmployees;
-
-    const isLoader = isLoaderPage || isLoaderFilters;
 
     const handleChangeFilters = (data: Record<string, unknown>) => {
       dispatch(setFilters(data))
@@ -40,11 +34,11 @@ export const useEmployeesToday = () => {
     }, []);
 
     return { filters,
-             deferredFilteredEmployees,
+             filteredEmployees,
              companies, 
              equipments, 
              supervisors, 
-             isLoader, 
+             isLoaderPage, 
              professions, 
              places,
              handleChangeFilters,

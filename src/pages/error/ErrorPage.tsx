@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import img from '../../shared/assets/notFound.png';
+import img from '../../shared/ui/assets/notFound.png';
 import style from './ErrorPage.module.css';
 import { Link } from 'react-router';
 
