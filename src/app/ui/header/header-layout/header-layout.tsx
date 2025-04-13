@@ -1,4 +1,4 @@
-import style from './HeaderLayout.module.css';
+import style from './header-layout.module.css';
 import { FC } from 'react';
 import React from 'react';
 

@@ -6,7 +6,7 @@ import style from './AuthPage.module.css';
 import { Typography } from '@mui/material';
 import { FC, useEffect} from 'react';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../app/store/store';
+import { AppDispatch } from '../../app/store';
 import { logIn, setEmail, setErrorAuth, setPassword } from './authPage.slice';
 import { useLocation, useNavigate } from 'react-router';
 import { ErrorMessage } from './errorMessage/ErrorMessage';

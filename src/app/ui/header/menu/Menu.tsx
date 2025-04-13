@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { NavLink } from 'react-router';
-import style from './Menu.module.css';
+import style from './menu.module.css';
 
 const Menu: FC = () => {
   return (

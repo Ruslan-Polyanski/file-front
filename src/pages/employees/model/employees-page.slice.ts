@@ -1,24 +1,24 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { API } from '../../../shared/api/api';
-import { RootState } from '../../../app/store/store';
+import { RootState } from '../../../app/store';
 import { logOut } from '../../auth/authPage.slice';
 
-interface ICompany {
+export interface ICompany {
   id: number;
   title: string;
 }
 
-type TEquipment = {
+export type TEquipment = {
   id: number;
   title: string;
 }
 
-interface ISupervisor {
+export interface ISupervisor {
   id: number;
   fullName: string;
 }
 
-type TProfession = {
+export type TProfession = {
   id: number;
   name: string;
 }

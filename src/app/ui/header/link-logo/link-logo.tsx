@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import style from './LinkLogo.module.css';
+import style from './link-logo.module.css';
 import { UiLogo } from '../../../../shared/ui/logo/ui-logo';
 
 const LinkLogo = () => {
