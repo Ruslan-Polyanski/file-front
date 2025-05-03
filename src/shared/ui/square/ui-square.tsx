@@ -6,10 +6,8 @@ interface IProps {
     color: 'green' | 'red';
 }
 
-const UiSquare: FC<IProps> = ({color}) => {
-    return (
-        <div className={classNames(style.square, style[color])}></div>
-    )
-}
+const UiSquare: FC<IProps> = ({ color }) => {
+    return <div className={classNames(style.square, style[color])}></div>;
+};
 
-export { UiSquare }
+export { UiSquare };

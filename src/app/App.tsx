@@ -12,7 +12,7 @@ import { ru } from 'date-fns/locale';
 import { Header } from './ui/header/header';
 import { LayoutCheckAuth } from './ui/layout/LayoutCheckAuth';
 import { LayoutBase } from './ui/layout/layoutBase/LayoutBase';
-import { EmployeesPage } from '../pages/employees/ui/employees-page';
+import { EmployeesPage } from '@/pages/employees/EmployeesPage';
 
 registerLocale('ru', ru);
 
