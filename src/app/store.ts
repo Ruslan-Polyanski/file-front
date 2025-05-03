@@ -1,14 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { authSlice } from '../pages/auth/authPage.slice';
-import { employeesSlice } from '../pages/employees/model/employees-page.slice';
+import { useDispatch } from 'react-redux';
+import { employeesSlice } from '@/features/employees-today';
 
 export const store = configureStore({
-  reducer: {
-    auth: authSlice.reducer,
-    employees: employeesSlice.reducer,
-  },
-  devTools: true,
+    reducer: {
+        auth: authSlice.reducer,
+        employees: employeesSlice.reducer,
+    },
+    devTools: true,
 });
 
+type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();

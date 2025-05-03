@@ -5,19 +5,28 @@ import { setMinutes } from 'date-fns/setMinutes';
 import style from './ui-input-time.module.css';
 
 interface IProps {
-    title: string; 
+    title: string;
     minTime?: [number, number];
     maxTime?: [number, number];
     timeCaption: boolean;
     interval: number;
-    locale: "ru" | "es";
-    dateFormat: "HH:mm";
+    locale: 'ru' | 'es';
+    dateFormat: 'HH:mm';
     selected: any;
     onChange: any;
 }
 
-const UiInputTime: FC<IProps> = ({title, minTime, maxTime, timeCaption, interval, locale, dateFormat, selected, onChange}) => {
-
+const UiInputTime: FC<IProps> = ({
+    title,
+    minTime,
+    maxTime,
+    timeCaption,
+    interval,
+    locale,
+    dateFormat,
+    selected,
+    onChange,
+}) => {
     return (
         <div className={style.timeSetter}>
             <span>{title}</span>
@@ -36,7 +45,7 @@ const UiInputTime: FC<IProps> = ({title, minTime, maxTime, timeCaption, interval
                 />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export { UiInputTime }
+export { UiInputTime };
