@@ -9,6 +9,7 @@ import {
     TSupervisor,
     TUpdatedTodayEmployee,
 } from '../model/types/employee-list-today';
+import { TUserResponse } from '../model/types/auth';
 
 const errorEmptyToken = {
     status: 401,
@@ -77,7 +78,7 @@ const API = {
             signal,
         );
     },
-    checkValidationToken<S extends AbortSignal>(signal?: S) {
+    checkValidationToken<S extends AbortSignal>(signal?: S): Promise<TUserResponse> {
         const accessToken = access_token.get();
         if (!accessToken) throw errorEmptyToken;
         return axioses.get(
@@ -105,7 +106,10 @@ const API = {
             signal,
         );
     },
-    logIn<T extends Record<'email' | 'password', string>, S extends AbortSignal>(body: T, signal?: S) {
+    logIn<T extends Record<'email' | 'password', string>, S extends AbortSignal>(
+        body: T,
+        signal?: S,
+    ): Promise<TUserResponse> {
         return axioses.post(
             '/api/auth/login',
             {

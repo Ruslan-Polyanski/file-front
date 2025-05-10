@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { authSlice } from '../pages/auth/authPage.slice';
 import { useDispatch } from 'react-redux';
 import { employeesSlice } from '@/features/employees-today';
+import { authSlice } from '@/features/auth/model/auth.slice';
 
 export const store = configureStore({
     reducer: {
