@@ -4,28 +4,31 @@ import { FC } from 'react';
 import { ErrorPage } from './../pages/error/ErrorPage';
 import { HomePage } from './../pages/home/HomePage';
 import { CarPage } from './../pages/car/CarPage';
-import { AuthPage } from './../pages/auth/AuthPage';
 import { Outlet, Route, Routes } from 'react-router';
 import { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ru } from 'date-fns/locale';
 import { Header } from './ui/header/header';
-import { LayoutCheckAuth } from './ui/layout/LayoutCheckAuth';
-import { LayoutBase } from './ui/layout/layoutBase/LayoutBase';
-import { EmployeesPage } from '@/pages/employees/EmployeesPage';
+import { Layout } from './ui/layout/layout/Layout';
+import { EmployeesPage } from '@/pages/employees/employees-page';
+import { CheckAuth } from './ui/layout/CheckAuth';
 
 registerLocale('ru', ru);
 
 const App: FC = () => {
     return (
         <Routes>
-            <Route path='/' element={<LayoutCheckAuth />}>
-                <Route element={<LayoutBase header={<Header />} outlet={<Outlet />} />}>
-                    <Route index element={<HomePage />} />
-                    <Route path='employees' element={<EmployeesPage />} />
-                    <Route path='car' element={<CarPage />} />
-                </Route>
-                <Route path='login' element={<AuthPage />} />
+            <Route
+                path='/'
+                element={
+                    <CheckAuth>
+                        <Layout header={<Header />} outlet={<Outlet />} />
+                    </CheckAuth>
+                }
+            >
+                <Route index element={<HomePage />} />
+                <Route path='employees' element={<EmployeesPage />} />
+                <Route path='car' element={<CarPage />} />
             </Route>
 
             <Route path='*' element={<ErrorPage />} />

@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import style from './LayoutBase.module.css';
+import style from './Layout.module.css';
 
-interface ILayoutBaseProps {
+interface IProps {
     header: React.ReactNode;
     outlet: React.ReactNode;
 }
 
-const LayoutBase: FC<ILayoutBaseProps> = ({ header, outlet }) => {
+const Layout: FC<IProps> = ({ header, outlet }) => {
     return (
         <>
             <header>{header}</header>
@@ -17,4 +17,4 @@ const LayoutBase: FC<ILayoutBaseProps> = ({ header, outlet }) => {
     );
 };
 
-export { LayoutBase };
+export { Layout };
