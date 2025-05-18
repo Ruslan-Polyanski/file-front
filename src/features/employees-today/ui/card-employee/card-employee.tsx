@@ -1,7 +1,7 @@
 import { FC, memo } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { TCompany, TEmployee, TEquipment, TSupervisor } from '@/shared/model/types/employee-list-today';
+import { TEmployee } from '@/shared/model/types/employee-list-today';
 import { UiSquare } from '@/shared/ui/square/ui-square';
 import { UiInputTime } from '@/shared/ui/input-time/ui-input-time';
 import { UiButton } from '@/shared/ui/button/ui-button';
@@ -10,16 +10,16 @@ import { useCardEmployee } from '../../model/use-card-employee';
 import { CardEmployeeLayout } from './card-employee-layout';
 
 interface ICardEmployee {
-    companies: TCompany[];
-    equipments: TEquipment[];
-    supervisors: TSupervisor[];
     employee: TEmployee;
 }
 
-const CardEmployee: FC<ICardEmployee> = ({ companies, equipments, supervisors, employee }) => {
+const CardEmployee: FC<ICardEmployee> = ({ employee }) => {
     const { photo, profession, fullName, dateTag } = employee;
 
     const {
+        companies,
+        equipments,
+        supervisors,
         startDate,
         setStartDate,
         endDate,
@@ -78,7 +78,6 @@ const CardEmployee: FC<ICardEmployee> = ({ companies, equipments, supervisors, e
             }
             selectBox={
                 <>
-                    {' '}
                     <Autocomplete
                         value={companyValue}
                         onChange={(event, newValue: string | null) => {

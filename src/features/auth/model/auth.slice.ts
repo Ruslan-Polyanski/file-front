@@ -1,5 +1,5 @@
 import { API } from '@/shared/api/api';
-import { access_token } from '@/shared/model/local-storage';
+import { access_token, refresh_token } from '@/shared/model/local-storage';
 import { TUser } from '@/shared/model/types/auth';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -47,12 +47,10 @@ export const authSlice = createSlice({
                 state.status = 'success';
                 state.isAuth = true;
 
-                const { token, id, email } = action.payload;
+                const { id, email } = action.payload;
 
                 state.userID = id;
                 state.email = email;
-
-                access_token.set(token);
 
                 state.error = '';
                 state.password = '';
@@ -85,7 +83,12 @@ export const authSlice = createSlice({
 export const { setEmail, setPassword, setError, setStatus } = authSlice.actions;
 
 export const logIn = createAsyncThunk('@@Auth/logIn', async (user: TUser) => {
-    return API.logIn(user);
+    const { accessToken, refreshToken, ...data } = await API.logIn(user);
+
+    access_token.set(accessToken);
+    refresh_token.set(refreshToken);
+
+    return data;
 });
 
 export const checkAuth = createAsyncThunk('@@Auth/checkAuth', async () => {
@@ -94,5 +97,7 @@ export const checkAuth = createAsyncThunk('@@Auth/checkAuth', async () => {
 
 export const logOut = createAsyncThunk('@@Auth/logOut', async () => {
     access_token.delete();
+    refresh_token.delete();
+
     return API.checkValidationToken();
 });
