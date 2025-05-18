@@ -7,7 +7,7 @@ import { setMinutes } from 'date-fns/setMinutes';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { saveEmployeeData } from './employees-today.slice';
-import { selectorSavingIdCardEmployees } from './selectors';
+import { selectorCompanies, selectorEquipments, selectorSavingIdCardEmployees, selectorSupervisors } from './selectors';
 
 export const useCardEmployee = (employee: TEmployee) => {
     const { profession, fullName, equipment, supervisor, company, id, startTime, endTime, breakTime } = employee;
@@ -15,6 +15,9 @@ export const useCardEmployee = (employee: TEmployee) => {
     const dispatch = useAppDispatch();
 
     const isSavingCardEmployee = useSelector(selectorSavingIdCardEmployees(id));
+    const companies = useSelector(selectorCompanies);
+    const equipments = useSelector(selectorEquipments);
+    const supervisors = useSelector(selectorSupervisors);
 
     const [companyValue, setCompanyValue] = useState<string | null>(company ?? '');
     const [equipmentValue, setEquipmentValue] = useState<string | null>(equipment ?? '');
@@ -64,6 +67,9 @@ export const useCardEmployee = (employee: TEmployee) => {
     };
 
     return {
+        companies,
+        equipments,
+        supervisors,
         startDate,
         setStartDate,
         endDate,

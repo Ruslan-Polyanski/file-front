@@ -1,4 +1,5 @@
-// const BASE_URL = 'http://89.111.153.176';
+import { access_token, refresh_token } from '../model/local-storage';
+
 const BASE_URL = 'http://localhost:3001';
 
 const METHOD = {
@@ -30,15 +31,37 @@ class API {
         });
 
         if (!response.ok) {
-            const error: { error: string; message: string; statusCode: number } = await response.json();
+            if (response.status === 401) {
+                const refreshToken = refresh_token.get();
+                const response = await fetch('http://localhost:3001/api/auth/refresh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${refreshToken}`,
+                    },
+                    body: JSON.stringify({
+                        id: 5,
+                        email: 'guyda@guyda.com',
+                    }),
+                });
 
-            const castomError = {
-                status: error.statusCode || response.status,
-                reason: response.statusText,
-                message: error.message === 'Unauthorized' ? response.url : error.message,
-            };
+                if (!response.ok) {
+                    console.log('logount');
+                    throw new Error('Logout');
+                }
+                const result = await response.json();
+                access_token.set(result.accessToken);
+                refresh_token.set(result.refreshToken);
+            }
+            // const error: { error: string; message: string; statusCode: number } = await response.json();
 
-            throw castomError;
+            // const castomError = {
+            //     status: error.statusCode || response.status,
+            //     reason: response.statusText,
+            //     message: error.message === 'Unauthorized' ? response.url : error.message,
+            // };
+
+            // throw castomError;
         }
 
         return await response.json();

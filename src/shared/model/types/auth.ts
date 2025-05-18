@@ -6,5 +6,6 @@ export type TUser = {
 export type TUserResponse = {
     id: number;
     email: string;
-    token?: string;
+    accessToken?: string;
+    refreshToken?: string;
 };

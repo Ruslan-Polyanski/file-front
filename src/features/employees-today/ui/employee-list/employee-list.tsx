@@ -5,7 +5,7 @@ import { UiLoader } from '@/shared/ui/loaders/loader/ui-loader';
 import { UiError } from '@/shared/ui/error/ui-error';
 
 export const EmployeeList: FC = () => {
-    const { filteredEmployees, companies, equipments, supervisors, status, error } = useEmployeeListToday();
+    const { filteredEmployees, status, error } = useEmployeeListToday();
 
     if (status === 'loading') return <UiLoader />;
     if (status === 'error') return <UiError message={error} />;
@@ -13,15 +13,7 @@ export const EmployeeList: FC = () => {
     return (
         <>
             {filteredEmployees.map((employee) => {
-                return (
-                    <CardEmployee
-                        key={employee.id}
-                        employee={employee}
-                        companies={companies}
-                        equipments={equipments}
-                        supervisors={supervisors}
-                    />
-                );
+                return <CardEmployee key={employee.id} employee={employee} />;
             })}
         </>
     );
