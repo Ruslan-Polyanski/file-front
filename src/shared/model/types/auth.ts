@@ -9,3 +9,8 @@ export type TUserResponse = {
     accessToken?: string;
     refreshToken?: string;
 };
+
+export type TUserRefreshToken = {
+    id: number;
+    email: string;
+};
