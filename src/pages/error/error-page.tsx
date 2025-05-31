@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import img from '../../shared/ui/assets/notFound.png';
-import style from './ErrorPage.module.css';
+import style from './error-page.module.css';
 import { Link } from 'react-router';
 
 const ErrorPage: FC = () => {
