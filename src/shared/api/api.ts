@@ -1,5 +1,3 @@
-import { axioses } from './axioses';
-import { access_token } from '../model/local-storage';
 import {
     TCompany,
     TDataEmployee,
@@ -11,114 +9,73 @@ import {
 } from '../model/types/employee-list-today';
 import { TUserResponse } from '../model/types/auth';
 
-const errorEmptyToken = {
-    status: 401,
-    reason: 'Unauthorized',
-    message: 'token not found',
-};
+import axios from 'axios';
 
-const API = {
-    getCompanies<S extends AbortSignal>(signal?: S): Promise<Record<'companies', TCompany[]>> {
-        const accessToken = access_token.get();
-        if (!accessToken) throw errorEmptyToken;
-        return axioses.get(
-            '/api/companies',
-            {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            signal,
-        );
+export const axiosAPI = axios.create({
+    baseURL: 'http://localhost:3001',
+    timeout: 1000,
+    headers: {
+        'Content-Type': 'application/json',
     },
-    getEquipments<S extends AbortSignal>(signal?: S): Promise<Record<'equipments', TEquipment[]>> {
-        const accessToken = access_token.get();
-        if (!accessToken) throw errorEmptyToken;
-        return axioses.get(
-            '/api/equipments',
-            {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
+});
+
+export const API = {
+    async getCompanies<S extends AbortSignal>(signal?: S): Promise<Record<'companies', TCompany[]>> {
+        const response = await axiosAPI.get('/api/companies', {
             signal,
-        );
+        });
+        return response.data;
     },
-    getSupervisors<S extends AbortSignal>(signal?: S): Promise<Record<'supervisors', TSupervisor[]>> {
-        const accessToken = access_token.get();
-        if (!accessToken) throw errorEmptyToken;
-        return axioses.get(
-            '/api/levels/supervisors',
-            {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
+    async getEquipments<S extends AbortSignal>(signal?: S): Promise<Record<'equipments', TEquipment[]>> {
+        const response = await axiosAPI.get('/api/equipments', {
             signal,
-        );
+        });
+        return response.data;
     },
-    getTodayEmployees<S extends AbortSignal>(signal?: S): Promise<Record<'users', TEmployee[]>> {
-        const accessToken = access_token.get();
-        if (!accessToken) throw errorEmptyToken;
-        return axioses.get(
-            '/api/date/today',
-            {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
+    async getSupervisors<S extends AbortSignal>(signal?: S): Promise<Record<'supervisors', TSupervisor[]>> {
+        const response = await axiosAPI.get('/api/levels/supervisors', {
             signal,
-        );
+        });
+        return response.data;
     },
-    getProfessions<S extends AbortSignal>(signal?: S): Promise<Record<'professions', TProfession[]>> {
-        const accessToken = access_token.get();
-        if (!accessToken) throw errorEmptyToken;
-        return axioses.get(
-            '/api/professions',
-            {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
+    async getTodayEmployees<S extends AbortSignal>(signal?: S): Promise<Record<'users', TEmployee[]>> {
+        const response = await axiosAPI.get('/api/date/today', {
             signal,
-        );
+        });
+        return response.data;
     },
-    checkValidationToken<S extends AbortSignal>(signal?: S): Promise<TUserResponse> {
-        const accessToken = access_token.get();
-        if (!accessToken) throw errorEmptyToken;
-        return axioses.get(
-            '/api/auth/profile',
-            {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
+    async getProfessions<S extends AbortSignal>(signal?: S): Promise<Record<'professions', TProfession[]>> {
+        const response = await axiosAPI.get('/api/professions', {
             signal,
-        );
+        });
+        return response.data;
     },
-    updateTodayEmployee<T extends TDataEmployee, S extends AbortSignal>(
+    async checkValidationToken<S extends AbortSignal>(signal?: S): Promise<TUserResponse> {
+        const response = await axiosAPI.get('/api/auth/profile', {
+            signal,
+        });
+        return response.data;
+    },
+    async updateTodayEmployee<T extends TDataEmployee, S extends AbortSignal>(
         body: T,
         signal?: S,
     ): Promise<TUpdatedTodayEmployee> {
-        const accessToken = access_token.get();
-        if (!accessToken) throw errorEmptyToken;
-        return axioses.patch(
-            '/api/date/today',
-            {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            body,
+        const response = await axiosAPI.patch('/api/date/today', body, {
             signal,
-        );
+        });
+        return response.data;
     },
-    logIn<T extends Record<'email' | 'password', string>, S extends AbortSignal>(
+    async logIn<T extends Record<'email' | 'password', string>, S extends AbortSignal>(
         body: T,
         signal?: S,
     ): Promise<TUserResponse> {
-        return axioses.post(
-            '/api/auth/login',
-            {
-                'Content-Type': 'application/json',
-            },
-            body,
-            signal,
-        );
+        const response = await axiosAPI.post('/api/auth/login', body, { signal });
+
+        return response.data;
+    },
+    async refresh(): Promise<TUserResponse> {
+        const response = await axiosAPI.post('/api/auth/refresh');
+
+        return response.data;
     },
 };
-
-export { API };
