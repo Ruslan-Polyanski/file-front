@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import style from './Layout.module.css';
+import style from './layout.module.css';
 
 interface IProps {
     header: React.ReactNode;
